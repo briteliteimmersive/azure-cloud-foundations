@@ -1,4 +1,4 @@
-name: Workflow for releasing management group module
+name: Module Management Groups Release
 
 on:
   workflow_dispatch:
@@ -6,9 +6,6 @@ on:
 jobs:
 
   module-release:
-    # permissions:
-    #   id-token: write # need this for OIDC
-    #   contents: read
     uses: briteliteimmersive/devops-automation-enablers/.github/workflows/tf-module-release.yml@feature/tf-workflows
     with:
       tf-module-name: 'management-groups'
