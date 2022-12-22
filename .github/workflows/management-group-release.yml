@@ -14,3 +14,4 @@ jobs:
       gh-runner: 'ubuntu-latest'
       tf-module-name: 'management-groups'
       tf-module-version: '0.1.0'
+    secrets: inherit
