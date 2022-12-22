@@ -11,7 +11,5 @@ jobs:
     #   contents: read
     uses: briteliteimmersive/devops-automation-enablers/.github/workflows/tf-module-release.yml@feature/tf-workflows
     with:
-      gh-runner: 'ubuntu-latest'
       tf-module-name: 'management-groups'
-      tf-module-version: '0.1.0'
     secrets: inherit
