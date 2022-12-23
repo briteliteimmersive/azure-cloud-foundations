@@ -1,7 +1,11 @@
 name: Module Management Groups Release
 
 on:
-  workflow_dispatch:
+ push:
+    branches:
+      - 'main'
+    paths:
+      - 'management-groups/**'
 
 jobs:
 
