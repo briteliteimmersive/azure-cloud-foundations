@@ -83,5 +83,5 @@ variable "destroy_duration_delay" {
 
 variable "deployment_info" {
   type    = string
-  default = "{“version”: “”, “commit-id”: “”, “pipeline-name”:””, “github-repo”: “”}"
+  default = "{“pipeline-name”:””, “github-repo”: “”}"
 }
