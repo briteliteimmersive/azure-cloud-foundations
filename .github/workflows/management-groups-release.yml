@@ -1,4 +1,4 @@
-name: Module Management Groups Release
+name: Management Groups Release
 
 on:
  push:
