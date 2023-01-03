@@ -1,4 +1,4 @@
-name: Management Groups Release
+name: management-groups
 
 on:
  push:
@@ -12,5 +12,5 @@ jobs:
   module-release:
     uses: briteliteimmersive/devops-automation-enablers/.github/workflows/tf-module-release.yml@main
     with:
-      tf-module-name: 'management-groups'
+      tf-module-name: '${{ github.workflow }}'
     secrets: inherit
