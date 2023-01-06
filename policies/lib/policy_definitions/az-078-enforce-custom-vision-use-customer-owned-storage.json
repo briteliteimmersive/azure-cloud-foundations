@@ -1,0 +1,65 @@
+{
+    "name": "az-078-enforce-custom-vision-use-customer-owned-storage",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-078-enforce-custom-vision-use-customer-owned-storage",
+        "description": "(az-078):enforce custom vision service to use customer owned storageenforce-custom-vision-use-customer-owned-storage",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "field": "kind",
+                        "like": "CustomVision*"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.CognitiveServices/accounts/userOwnedStorage[*]"
+                        },
+                        "less": 1
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+                            "where": {
+                                "equals": "CustomerManagedStorage",
+                                "field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+                            }
+                        },
+                        "greater": 0
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

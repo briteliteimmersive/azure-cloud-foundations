@@ -1,0 +1,179 @@
+{
+    "name": "az-055-enforce-general-res-allowed-locations",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "displayName": "az-055-enforce-general-res-allowed-locations",
+        "description": "(az-055) : This policy restricts the Locations (Azure regions) where resources can be deployed",
+        "metadata": {
+            "version": "2.0",
+            "category": "General"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            },
+            "listOfAllowedLocations": {
+                "allowedValues": [
+                    "australiacentral",
+                    "australiacentral2",
+                    "australiaeast",
+                    "australiasoutheast",
+                    "brazilsouth",
+                    "brazilsoutheast",
+                    "canadacentral",
+                    "canadaeast",
+                    "centralindia",
+                    "centralus",
+                    "centraluseuap",
+                    "eastasia",
+                    "eastus",
+                    "eastus2",
+                    "eastus2euap",
+                    "francecentral",
+                    "francesouth",
+                    "germanynorth",
+                    "germanywestcentral",
+                    "japaneast",
+                    "japanwest",
+                    "jioindiacentral",
+                    "jioindiawest",
+                    "koreacentral",
+                    "koreasouth",
+                    "northcentralus",
+                    "northeurope",
+                    "norwayeast",
+                    "norwaywest",
+                    "southafricanorth",
+                    "southafricawest",
+                    "southcentralus",
+                    "southeastasia",
+                    "southindia",
+                    "swedencentral",
+                    "switzerlandnorth",
+                    "switzerlandwest",
+                    "uaecentral",
+                    "uaenorth",
+                    "uksouth",
+                    "ukwest",
+                    "westcentralus",
+                    "westeurope",
+                    "westindia",
+                    "westus",
+                    "westus2",
+                    "westus3"
+                ],
+                "defaultValue": [
+                    "eastus"
+                ],
+                "metadata": {
+
+                    "description": "The list of approved Azure Physical Locations (Regions) that can be specified when deploying resources.",
+                    "displayName": "Allowed Locations (Azure Regions)",
+                    "strongType": "location"
+                },
+                "type": "Array"
+            },
+            "listOfLogicalLocations": {
+                "allowedValues": [
+                    "asia",
+                    "asiapacific",
+                    "australia",
+                    "brazil",
+                    "canada",
+                    "centralusstage",
+                    "eastasiastage",
+                    "eastus2stage",
+                    "eastusstage",
+                    "europe",
+                    "france",
+                    "germany",
+                    "global",
+                    "india",
+                    "japan",
+                    "korea",
+                    "northcentralusstage",
+                    "norway",
+                    "southafrica",
+                    "southcentralusstage",
+                    "southeastasiastage",
+                    "switzerland",
+                    "uae",
+                    "uk",
+                    "unitedstates",
+                    "westus2stage",
+                    "westusstage"
+                ],
+                "defaultValue": [
+                    "unitedstates"
+                ],
+                "metadata": {
+
+                    "description": "The list of Logical Azure Locations that are used by Azure Managed Services.",
+                    "displayName": "Logical Locations (Subset of Geography Groups)",
+                    "strongType": "location"
+                },
+                "type": "Array"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "not": {
+                            "equals": "Microsoft.PowerBIDedicated/autoScaleVCores",
+                            "field": "type"
+                        }
+                    },
+                    {
+                        "not": {
+                            "field": "location",
+                            "in": "[parameters('listOfAllowedLocations')]"
+                        }
+                    },
+                    {
+                        "not": {
+                            "field": "location",
+                            "in": "[parameters('listOfLogicalLocations')]"
+                        }
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "equals": "Deny",
+                                    "value": "[parameters('effect')]"
+                                },
+                                {
+                                    "exists": "true",
+                                    "field": "tags.enforcementId"
+                                },
+                                {
+                                    "Equals": "CS0WC1P",
+                                    "field": "tags['enforcementId']"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

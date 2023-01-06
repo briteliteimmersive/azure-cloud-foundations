@@ -1,0 +1,34 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Grants access to create and manage snapshots and disks, and also move them between resource groups",
+    "name": "bae9a54b-b111-487e-b332-c0eff882e251",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Compute/snapshots/read",
+          "Microsoft.Compute/snapshots/write",
+          "Microsoft.Compute/snapshots/delete",
+          "Microsoft.Resources/deployments/read",
+          "Microsoft.Resources/deployments/write",
+          "Microsoft.Resources/deployments/validate/action",
+          "Microsoft.Resources/deployments/whatIf/action",
+          "Microsoft.Resources/subscriptions/resourceGroups/moveResources/action",
+          "Microsoft.Resources/subscriptions/resourceGroups/write",
+          "Microsoft.Resources/subscriptions/resourceGroups/validateMoveResources/action",
+          "Microsoft.Compute/disks/read",
+          "Microsoft.Compute/disks/write",
+          "Microsoft.Compute/disks/delete",
+          "Microsoft.Resources/tags/read",
+          "Microsoft.Compute/disks/beginGetAccess/action",
+          "Microsoft.Compute/disks/endGetAccess/action",
+          "Microsoft.Resources/tags/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Snapshot Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

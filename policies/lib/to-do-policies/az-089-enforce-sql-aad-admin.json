@@ -1,0 +1,48 @@
+{
+    "name": "az-089-enforce-sql-aad-admin",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-089-enforce-sql-aad-admin",
+        "description": "(az-089):Audits Azure SQL resources use of Azure AD Administratorsenforce-sql-aad-admin",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Database"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": null,
+                "defaultValue": null,
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "equals": "Microsoft.Sql/servers",
+                "field": "type"
+            },
+            "then": {
+                "details": {
+                    "existenceCondition": {
+                        "allOf": [
+                            {
+                                "equals": "ActiveDirectory",
+                                "field": "Microsoft.Sql/servers/administrators/administratorType"
+                            }
+                        ]
+                    },
+                    "type": "Microsoft.Sql/servers/administrators"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

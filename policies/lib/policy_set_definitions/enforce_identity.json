@@ -1,0 +1,132 @@
+{
+    "name": "Enforce-Identity",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Requires Identity",
+      "description": " ",
+      "metadata": {},
+      "parameters": {
+        "az-002-enforce-cognitive-services-accounts-require-identity": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-002-enforce-cognitive-services-accounts-require-identity",
+            "description": "Custom Vision accounts should use a managed identity; Assigning a managed identity to your Cognitive Service account for CustomVision Kinds, helps ensure secure authentication. This identity is used by this Cognitive service account to communicate with other Azure services, like Azure Key Vault, in a secure way without you having to manage any credentials."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-003-enforce-cognitive-services-accounts-require-owned-sa": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-003-enforce-cognitive-services-accounts-require-owned-sa",
+            "description": "Cognitive Services accounts should use customer owned storage; Use customer owned storage to control the data stored at rest in Cognitive Services for CustomVision Kinds. To learn more about customer owned storage, visit https://aka.ms/cogsvc-cmk."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-011-monitor-batch-account-require-managed-identity": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-011-monitor-batch-account-require-managed-identity",
+            "description": "Azure Batch account should use a managed identity; Assigning a managed identity to your Batch account helps ensure secure authentication. This identity is used by this Batch service account to communicate with other Azure services, like Azure Key Vault, in a secure way without you having to manage any credentials."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-073-form-recognizer-enforce-managed-identity": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-073-form-recognizer-enforce-managed-identity",
+            "description": "enfoce use of managed identity for form-recognizer to securely communicate with other azure servicesform-recognizer-enforce-managed-identity"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-079-enforce-custom-vision-use-managed-identity": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-079-enforce-custom-vision-use-managed-identity",
+            "description": "enforce custom vision service to use managed identityenforce-custom-vision-use-managed-identity"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-002-enforce-cognitive-services-accounts-require-identity",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-002-enforce-cognitive-services-accounts-require-identity",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-002-enforce-cognitive-services-accounts-require-identity')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-003-enforce-cognitive-services-accounts-require-owned-sa",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-003-enforce-cognitive-services-accounts-require-owned-sa",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-003-enforce-cognitive-services-accounts-require-owned-sa')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-011-monitor-batch-account-require-managed-identity",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-011-monitor-batch-account-require-managed-identity",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-011-monitor-batch-account-require-managed-identity')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-073-form-recognizer-enforce-managed-identity",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-073-form-recognizer-enforce-managed-identity",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-073-form-recognizer-enforce-managed-identity')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-079-enforce-custom-vision-use-managed-identity",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-079-enforce-custom-vision-use-managed-identity",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-079-enforce-custom-vision-use-managed-identity')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

@@ -1,0 +1,56 @@
+{
+    "name": "az-027-secure-cache-redis-prevent-non-ssl-port",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-027-secure-cache-redis-prevent-non-ssl-port",
+        "description": "(az-027) : This policy prevents Redis Cache resources from enabling use of non-SSL ports",
+        "metadata": {
+            "version": "2.0",
+            "category": "Cache"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Append",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Cache/Redis",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "true",
+                        "field": "Microsoft.Cache/Redis/enableNonSslPort"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": [
+                    {
+                      "field": "Microsoft.Cache/Redis/enableNonSslPort",
+                      "value": false
+                    }
+                  ]
+            }
+        }
+    }
+}

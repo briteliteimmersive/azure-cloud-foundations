@@ -1,0 +1,53 @@
+{
+    "name": "az-070-applicationgateway-enforce-sslpolicy",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-070-applicationgateway-enforce-sslpolicy",
+        "description": "(az-070):enfoce use of ssl policy in app-gateway network trafficapplicationgateway-enforce-sslPolicy",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/applicationGateways",
+                        "field": "type"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "exists": "false",
+                                "field": "Microsoft.Network/applicationGateways/sslPolicy"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

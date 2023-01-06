@@ -1,0 +1,53 @@
+{
+    "name": "az-076-enforce-custom-vision-local-auth-disabled",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-076-enforce-custom-vision-local-auth-disabled",
+        "description": "(az-076):enforce custom vision service to disable local authenticationenforce-custom-vision-local-auth-disabled",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "field": "kind",
+                        "like": "CustomVision*"
+                    },
+                    {
+                        "field": "Microsoft.CognitiveServices/accounts/disableLocalAuth",
+                        "notEquals": true
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

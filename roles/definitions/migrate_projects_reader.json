@@ -1,0 +1,20 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Migrate Projects Reader",
+    "name": "315d2329-4ded-47fb-bcdc-09dc49b78514",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Migrate/migrateprojects/read",
+          "Microsoft.Migrate/migrateprojects/solutions/read",
+          "Microsoft.Migrate/migrateprojects/solutions/getconfig/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Migrate Projects Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

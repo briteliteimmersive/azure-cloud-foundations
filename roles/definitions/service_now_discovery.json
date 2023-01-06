@@ -1,0 +1,22 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role Service Now Azure API discovery.  Includes reader as well as other specific actions needed to discover attributes of certain PaaS services and deploy action groups for on demand discovery.",
+    "name": "3ff82cf5-cc4c-43f9-a7cb-d08b1aba7a54",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.Web/sites/publishxml/action",
+          "Microsoft.Insights/actionGroups/*",
+          "Microsoft.Insights/activityLogAlerts/*",
+          "microsoft.resources/deployments/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Service Now Discovery",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

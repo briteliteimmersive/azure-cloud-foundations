@@ -1,0 +1,56 @@
+{
+    "name": "az-011-monitor-batch-account-require-managed-identity",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "mode": "All",
+      "displayName": "az-011-monitor-batch-account-require-managed-identity",
+      "description": "(az-011): Azure Batch account should use a managed identity; Assigning a managed identity to your Batch account helps ensure secure authentication. This identity is used by this Batch service account to communicate with other Azure services, like Azure Key Vault, in a secure way without you having to manage any credentials.",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Batch"
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "allOf": [
+            {
+              "equals": "Microsoft.Batch/batchAccounts",
+              "field": "type"
+            },
+            {
+              "anyOf": [
+                {
+                  "exists": "false",
+                  "field": "identity.type"
+                },
+                {
+                  "equals": "None",
+                  "field": "identity.type"
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+  }
+}

@@ -1,0 +1,51 @@
+{
+    "name": "az-018-monitor-network-private-endpoints-require-private-dns",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-018-monitor-network-private-endpoints-require-private-dns",
+        "description": "(az-018) : Azure Private Links / Private Endpoints to use private DNS zones; Use private DNS zones to override the DNS resolution for a private endpoint. A private DNS zone links to your virtual network to resolve to Azure Private Link.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Network"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/privateEndpoints",
+                        "field": "type"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.Network/privateEndpoints/customDnsConfigs[*]"
+                        },
+                        "greater": 0
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

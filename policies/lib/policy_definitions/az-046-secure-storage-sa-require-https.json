@@ -1,0 +1,51 @@
+{
+    "name": "az-046-secure-storage-sa-require-https",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-046-secure-storage-sa-require-https",
+        "description": "(az-046) : Audits Network Interfaces with associated Public IP addresses",
+        "metadata": {
+            "version": "2.0",
+            "category": "Storage"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Storage/storageAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "equals": "true",
+                            "field": "Microsoft.Storage/storageAccounts/supportsHttpsTrafficOnly"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

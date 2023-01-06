@@ -1,0 +1,52 @@
+{
+    "name": "az-001-enforce-app-service-host-env-require-delegated-subnet",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "mode": "All",
+      "displayName": "az-001-enforce-app-service-host-env-require-delegated-subnet",
+      "description": "(az-001): App Service HostingEnvironment(ASE) resources should be delegated to a subnet",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "App Service"
+      },
+      "parameters": {
+        "effect": {
+          "type": "String",
+          "defaultValue": "Deny",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+              "description": "Enable or disable the execution of the policy",
+              "displayName": "Effect"
+            }
+          }
+      },
+      "policyRule": {
+        "if": {
+          "anyof": [
+            {
+              "allOf": [
+                {
+                  "equals": "Microsoft.Web/hostingEnvironments",
+                  "field": "type"
+                },
+                {
+                  "exists": "false",
+                  "field": "Microsoft.Web/hostingEnvironments/virtualNetwork.id"
+                }
+              ]
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]"
+        }
+      }
+    }
+}

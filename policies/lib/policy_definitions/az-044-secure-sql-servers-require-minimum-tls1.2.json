@@ -1,0 +1,85 @@
+{
+    "name": "az-044-secure-sql-servers-require-minimum-tls1.2",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-044-secure-sql-servers-require-minimum-tls1.2",
+        "description": "(az-044) : Enforce TLS 1.2 On Azure SQL Database",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Sql"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "anyOf": [
+                            {
+                                "allOf": [
+                                    {
+                                        "equals": "Microsoft.Sql/servers",
+                                        "field": "type"
+                                    },
+                                    {
+                                        "anyOf": [
+                                            {
+                                                "exists": false,
+                                                "field": "Microsoft.Sql/servers/minimalTlsVersion"
+                                            },
+                                            {
+                                                "field": "Microsoft.Sql/servers/minimalTlsVersion",
+                                                "notEquals": "1.2"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "equals": "Microsoft.Sql/managedInstances",
+                                        "field": "type"
+                                    },
+                                    {
+                                        "anyOf": [
+                                            {
+                                                "exists": false,
+                                                "field": "Microsoft.Sql/managedInstances/minimalTlsVersion"
+                                            },
+                                            {
+                                                "field": "Microsoft.Sql/managedInstances/minimalTlsVersion",
+                                                "notEquals": "1.2"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "name": "az-080-enforce-subnet-delegation-PaaS",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-080-enforce-subnet-delegation-PaaS",
+        "description": "(az-080):enfoce subnet delegation for PaaS resources to securely communicate with other azure services.enforce-subnet-delegation-PaaS",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "anyof": [
+                    {
+                        "allOf": [
+                            {
+                                "equals": "Microsoft.Databricks/workspaces",
+                                "field": "type"
+                            },
+                            {
+                                "exists": "false",
+                                "field": "Microsoft.DataBricks/workspaces/parameters.customPrivateSubnetName.value"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Allows Reader plus additional actions needed when troubleshooting route issues.  Created for FW Automation Team.",
+    "name": "d7653e0e-146a-4377-a963-5d79115f53cf",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.Network/networkInterfaces/effectiveRouteTable/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Route Table Reader Plus",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

@@ -1,0 +1,28 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Lets you perform CRUD actions on DMS service/project/tasks.",
+    "name": "4d66aaac-180f-427f-8fba-62bdd933761f",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.DataMigration/services/*/write",
+          "Microsoft.DataMigration/services/*/delete",
+          "Microsoft.DataMigration/services/*/action",
+          "Microsoft.Network/virtualNetworks/subnets/join/action",
+          "Microsoft.Network/virtualNetworks/read",
+          "Microsoft.Resources/deployments/validate/action",
+          "Microsoft.Resources/deployments/*/read",
+          "Microsoft.Resources/deployments/*/write",
+          "Microsoft.Network/networkInterfaces/ipConfigurations/read",
+          "Microsoft.DataMigration/*/read",
+          "Microsoft.Resources/subscriptions/resourceGroups/read"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Database Migration Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

@@ -1,0 +1,56 @@
+{
+    "name": "az-065-enforce-disk-encryption-any",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-065-enforce-disk-encryption-any",
+        "description": "(az-065):enforce use of encrypted data disksenforce-disk-encryption-any",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny.",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Compute/disks",
+                        "field": "type"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/encryption.type",
+                        "notEquals": "EncryptionAtRestWithPlatformKey"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/encryption.type",
+                        "notEquals": "EncryptionAtRestWithCustomerKey"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/encryption.type",
+                        "notEquals": "EncryptionAtRestWithPlatformAndCustomerKeys"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

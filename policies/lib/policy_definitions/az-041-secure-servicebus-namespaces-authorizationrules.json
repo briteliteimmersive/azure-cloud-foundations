@@ -1,0 +1,49 @@
+{
+    "name": "az-041-secure-servicebus-namespaces-authorizationrules",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-041-secure-servicebus-namespaces-authorizationrules",
+        "description": "(az-041) : Service Bus clients should not use a namespace level access policy that provides access to all queues and topics in a namespace. To align with the least privilege security model, you shoud create access policies at the entity level for queues and topics to provide access to only the specific entity",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Service Bus"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.ServiceBus/namespaces/authorizationRules",
+                        "field": "type"
+                    },
+                    {
+                        "field": "name",
+                        "notEquals": "RootManageSharedAccessKey"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

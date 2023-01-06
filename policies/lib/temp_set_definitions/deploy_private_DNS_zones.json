@@ -1,0 +1,38 @@
+{
+    "name": "Deploy-Private-DNS-Zones",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Configure Azure PaaS services to use private DNS zones",
+      "description": "This policy initiative is a group of policies that ensures private endpoints to Azure PaaS services are integrated with Azure Private DNS zones",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Network"
+      },
+      "parameters": {
+        "az-024-monitor-Storage-sa-require-private-endpoint": {
+          "type": "string",
+          "metadata": {
+            "displayName": "az-024-monitor-Storage-sa-require-private-endpoint",
+            "strongType": "Microsoft.Network/privateDnsZones",
+            "description": "Storage Accounts should use a virtual network service endpoint; This policy audits any Storage Account not configured to use a virtual network service endpoint."
+          }
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-024-monitor-Storage-sa-require-private-endpoint",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-124-enforce-custom-vision-disable-public-network-access",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-024-monitor-Storage-sa-require-private-endpoint')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

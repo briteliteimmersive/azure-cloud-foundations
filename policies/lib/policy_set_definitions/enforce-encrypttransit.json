@@ -1,0 +1,277 @@
+{
+    "name": "Enforce-EncryptTransit",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Deny or Deploy and append TLS requirements and SSL enforcement on resources without Encryption in transit",
+      "description": "Choose either Deploy if not exist and append in combination with audit or Select Deny in the Policy effect. Deny polices shift left. Deploy if not exist and append enforce but can be changed, and because missing exsistense condition require then the combination of Audit. ",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Encryption"
+      },
+      "parameters": {
+        "az-013-enforce-cognitive-services-accounts-require-https": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [            
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-013-enforce-cognitive-services-accounts-require-https",
+            "description": "(az-013): Cognitive Services account ensure that  HTTPS only is enabled."
+          }
+        },
+        "az-025-secure-app-service-web-minimum-tls1.2": {
+          "type": "String",
+          "defaultValue": "Append",
+          "allowedValues": [
+            "Append",
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-025-secure-app-service-web-minimum-tls1.2",
+            "description": "Policy enforces the minimum use of TLS 1.2 on AppService resources"
+          }
+        },
+        "az-027-secure-cache-redis-prevent-non-ssl-port": {
+          "type": "String",
+          "defaultValue": "Append",
+          "allowedValues": [
+            "Append",
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-027-secure-cache-redis-prevent-non-ssl-port",
+            "description": "This policy prevents Redis Cache resources from enabling use of non-SSL ports"
+          }
+        },
+        "az-029-secure-db-for-mariadb-servers-require-minimum-tls1.2": {
+          "type": "String",
+          "defaultValue": "Append",
+          "allowedValues": [
+            "Audit",
+            "Append",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-029-secure-db-for-mariadb-servers-require-minimum-tls1.2",
+            "description": "Enforces SSL connections between MariaDB Database Server and client applications to be enabled using TLS 1.2."
+          }
+        },
+        "az-030-secure-db-for-mysql-servers-require-minimum-tls1.2.json": {
+          "type": "String",
+          "defaultValue": "Append",
+          "allowedValues": [
+            "Audit",
+            "Append",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-030-secure-db-for-mysql-servers-require-minimum-tls1.2.json",
+            "description": "Enforces SSL connections between PostGreSQL Database Server and client applications to be enabled using TLS 1.2."
+          }
+        },
+        "az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2": {
+          "metadata": {
+            "displayName": "az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2",
+            "description": "Enforces SSL connections between PostGreSQL Database Server and client applications to be enabled using TLS 1.2."
+          },
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Disabled",
+            "Deny"
+          ]
+        },
+        "az-044-secure-sql-servers-require-minimum-tls1.2": {
+          "metadata": {
+            "displayName": "az-044-secure-sql-servers-require-minimum-tls1.2",
+            "description": "Enforce TLS 1.2 On Azure SQL Database"
+          },
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ]
+        },
+        "az-047-secure-storage-sa-require-minimum-tls1.2": {
+          "metadata": {
+            "displayName": "az-047-secure-storage-sa-require-minimum-tls1.2",
+            "description": "Requires Storage Accounts to use TLS 1.2 and monitors those that do not"
+          },
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Disabled",
+            "Deny"
+          ]
+        },
+        "az-053-enforce-datalakestore-encryption": {
+          "metadata": {
+            "displayName": "az-053-enforce-datalakestore-encryption",
+            "description": "This policy enforces HTTPS ingress in a Kubernetes cluster. This policy is generally available for Kubernetes Service (AKS), and preview for AKS Engine and Azure Arc enabled Kubernetes. For instructions on using this policy, visit https://aka.ms/kubepolicydoc."
+          },
+          "type": "String",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-070-applicationgateway-enforce-sslpolicy": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-070-applicationgateway-enforce-sslpolicy",
+            "description": "enforce use of ssl policy in app-gateway network trafficapplicationgateway-enforce-sslPolicy"
+          }
+        },
+        "az-071-applicationgateway-enforce-tlsversion1.2": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-071-applicationgateway-enforce-tlsversion1.2",
+            "description": "enfoce use of Transport Layer Security version 1.2 in app-gateway network communicaitonsapplicationgateway-enforce-tlsversion1.2"
+          }
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-013-enforce-cognitive-services-accounts-require-https",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-013-enforce-cognitive-services-accounts-require-https",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-013-enforce-cognitive-services-accounts-require-https')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-025-secure-app-service-web-minimum-tls1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-025-secure-app-service-web-minimum-tls1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-025-secure-app-service-web-minimum-tls1.2')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-027-secure-cache-redis-prevent-non-ssl-port",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-027-secure-cache-redis-prevent-non-ssl-port",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-027-secure-cache-redis-prevent-non-ssl-port')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-029-secure-db-for-mariadb-servers-require-minimum-tls1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-029-secure-db-for-mariadb-servers-require-minimum-tls1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-029-secure-db-for-mariadb-servers-require-minimum-tls1.2')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-030-secure-db-for-mysql-servers-require-minimum-tls1.2.json",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-030-secure-db-for-mysql-servers-require-minimum-tls1.2.json",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-030-secure-db-for-mysql-servers-require-minimum-tls1.2.json')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-044-secure-sql-servers-require-minimum-tls1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-044-secure-sql-servers-require-minimum-tls1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-044-secure-sql-servers-require-minimum-tls1.2')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-047-secure-storage-sa-require-minimum-tls1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-047-secure-storage-sa-require-minimum-tls1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-047-secure-storage-sa-require-minimum-tls1.2')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-053-enforce-datalakestore-encryption",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-053-enforce-datalakestore-encryption",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-053-enforce-datalakestore-encryption')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-070-applicationgateway-enforce-sslpolicy",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-070-applicationgateway-enforce-sslpolicy",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-070-applicationgateway-enforce-sslpolicy')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-071-applicationgateway-enforce-tlsversion1.2",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-071-applicationgateway-enforce-tlsversion1.2",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-071-applicationgateway-enforce-tlsversion1.2')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

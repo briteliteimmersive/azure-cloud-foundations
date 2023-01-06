@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom Role for adding a subnet to a PaaS Firewall.  Used when the owner of a PaaS resource should not have full access to a subnet.",
+    "name": "6a366fdd-65ec-495c-a627-994dc11af736",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Network/virtualNetworks/subnets/joinViaServiceEndpoint/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Endpoint Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

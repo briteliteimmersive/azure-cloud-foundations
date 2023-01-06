@@ -1,0 +1,30 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "none",
+    "name": "fa3246e4-3af5-46cb-9b92-9715ab172c11",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.ApiManagement/service/*/read",
+          "Microsoft.ApiManagement/service/read",
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Support/*"
+        ],
+        "dataActions": [],
+        "notActions": [
+          "Microsoft.ApiManagement/service/users/keys/read",
+          "Microsoft.ApiManagement/service/products/policies/delete",
+          "Microsoft.ApiManagement/service/products/policies/write",
+          "Microsoft.ApiManagement/service/products/policies/read"
+        ],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "APIM Service Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

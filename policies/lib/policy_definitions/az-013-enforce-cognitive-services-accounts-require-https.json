@@ -1,0 +1,63 @@
+
+{
+    "name": "az-013-enforce-cognitive-services-accounts-require-https",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-013-enforce-cognitive-services-accounts-require-https",
+        "description": "(az-013): Cognitive Services account ensure that  HTTPS only is enabled.",
+        "metadata": {
+        "version": "1.0.0",
+        "category": "CognitiveServices"
+        },
+        "parameters": {
+        "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+            ],
+            "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+            }
+        }
+        },
+        "policyRule": {
+        "if": {
+            "allOf": [
+            {
+                "equals": "Microsoft.CognitiveServices/accounts",
+                "field": "type"
+            },
+            {
+                "field": "kind",
+                "like": "CustomVision*"
+            },
+            {
+                "field": "Microsoft.CognitiveServices/accounts/networkAcls.defaultAction",
+                "notEquals": "Deny"
+            },
+            {
+                "count": {
+                "field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+                "where": {
+                    "equals": "VirtualNetworks",
+                    "field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+                }
+                },
+                "greater": 0
+            }
+            ]
+        },
+        "then": {
+            "effect": "[parameters('effect')]"
+        }
+        }
+    }
+}

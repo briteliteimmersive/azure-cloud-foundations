@@ -1,0 +1,61 @@
+{
+    "name": "az-079-enforce-custom-vision-use-managed-identity",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-079-enforce-custom-vision-use-managed-identity",
+        "description": "(az-079):enforce custom vision service to use managed identityenforce-custom-vision-use-managed-identity",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "field": "kind",
+                        "like": "CustomVision*"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "exists": "false",
+                                "field": "identity.type"
+                            },
+                            {
+                                "equals": "None",
+                                "field": "identity.type"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

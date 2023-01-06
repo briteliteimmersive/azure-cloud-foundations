@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Necessary actions and data actions which a dev lead needs in order operate efficiently",
+    "name": "ee7531d5-0016-4545-99c2-a61f17893bf1",
+    "permissions": [
+      {
+        "actions": [
+          "*/read"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Application Developer Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

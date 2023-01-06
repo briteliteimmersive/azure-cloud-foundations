@@ -1,0 +1,65 @@
+{
+    "name": "az-031-secure-db-for-postgresql-servers-require-minimum-tls1.2",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-031-secure-DBforPostgreSQL-servers-require-minimum-tls1.",
+        "description": "(az-031) : Enforces SSL connections between PostGreSQL Database Server and client applications to be enabled using TLS 1.2.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "DBforPostgreSQL"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.DBforPostgreSQL/servers",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "exists": "true",
+                                    "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement"
+                                },
+                                {
+                                    "equals": "Enabled",
+                                    "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "not": {
+                            "equals": "TLS1_2",
+                            "field": "Microsoft.DBforPostgreSQL/servers/minimalTlsVersion"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

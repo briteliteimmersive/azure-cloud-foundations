@@ -1,0 +1,22 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role created to allow certain actions on event hubs and stream analytics.",
+    "name": "9556d049-7726-4931-8c48-f9cde69c99c7",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.EventHub/namespaces/eventhubs/write",
+          "Microsoft.EventHub/namespaces/eventhubs/consumergroups/write",
+          "Microsoft.StreamAnalytics/locations/testQuery/action",
+          "Microsoft.StreamAnalytics/locations/sampleInput/action",
+          "Microsoft.EventHub/namespaces/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Event Hub and Stream Analytics Config",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

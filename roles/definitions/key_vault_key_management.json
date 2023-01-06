@@ -1,0 +1,26 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role for use by tools which manage keys in Azure Key Vaults.",
+    "name": "5e7a0f15-5791-4cd6-80df-ccd4e9a334c7",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.KeyVault/*",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Support/*"
+        ],
+        "dataActions": [],
+        "notActions": [
+          "Microsoft.KeyVault/vaults/secrets/*",
+          "Microsoft.KeyVault/vaults/accessPolicies/write"
+        ],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Key Management",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

@@ -1,0 +1,16 @@
+name: roles
+
+on:
+ push:
+    branches:
+      - 'main'
+    paths:
+      - 'roles/**'
+
+jobs:
+
+  module-release:
+    uses: briteliteimmersive/devops-automation-enablers/.github/workflows/tf-module-release.yml@main
+    with:
+      tf-module-name: '${{ github.workflow }}'
+    secrets: inherit

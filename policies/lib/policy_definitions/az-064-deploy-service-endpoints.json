@@ -1,0 +1,234 @@
+{
+    "name": "az-064-deploy-service-endpoints",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-064-deploy-service-endpoints",
+        "description": "(az-064):Deploy service endpointsdeploy-service-endpoints",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "General"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit, Modify, or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/virtualNetworks",
+                        "field": "type"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.AzureActiveDirectory"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.AzureCosmosDB"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.EventHub"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.KeyVault"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.ServiceBus"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.Sql"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.Storage"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.Web"
+                            },
+                            {
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service",
+                                "notEquals": "Microsoft.CognitiveServices"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "details": {
+                    "deployment": {
+                        "properties": {
+                            "mode": "incremental",
+                            "parameters": {
+                                "locations": {
+                                    "value": "[field('location')]"
+                                },
+                                "subnetSettings": {
+                                    "value": "[field('Microsoft.Network/virtualNetworks/subnets')]"
+                                },
+                                "vNetName": {
+                                    "value": "[field('name')]"
+                                }
+                            },
+                            "template": {
+                                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                "contentVersion": "1.0.0.0",
+                                "parameters": {
+                                    "locations": {
+                                        "type": "string"
+                                    },
+                                    "subnetSettings": {
+                                        "type": "array"
+                                    },
+                                    "vNetName": {
+                                        "type": "string"
+                                    }
+                                },
+                                "resources": [
+                                    {
+                                        "apiVersion": "2020-04-01",
+                                        "copy": {
+                                            "batchSize": 1,
+                                            "count": "[length(parameters('subnetSettings'))]",
+                                            "mode": "serial",
+                                            "name": "subnetCopy"
+                                        },
+                                        "location": "[concat(parameters('locations'))]",
+                                        "name": "[concat(parameters('vNetName'),'/',parameters('subnetSettings')[copyIndex()].name)]",
+                                        "properties": {
+                                            "addressPrefix": "[parameters('subnetSettings')[copyIndex()].properties.addressPrefix]",
+                                            "serviceEndpoints": [
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.AzureActiveDirectory"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.AzureCosmosDB"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.EventHub"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.KeyVault"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.ServiceBus"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.Sql"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.Storage"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.Web"
+                                                },
+                                                {
+                                                    "locations": [
+                                                        "[concat(parameters('locations'))]"
+                                                    ],
+                                                    "service": "Microsoft.CognitiveServices"
+                                                }
+                                            ]
+                                        },
+                                        "type": "Microsoft.Network/virtualNetworks/subnets"
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "existenceCondition": {
+                        "allOf": [
+                            {
+                                "equals": "Microsoft.AzureActiveDirectory",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.AzureCosmosDB",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.EventHub",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.KeyVault",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.ServiceBus",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.Sql",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.Storage",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.Web",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            },
+                            {
+                                "equals": "Microsoft.CognitiveServices",
+                                "field": "Microsoft.Network/virtualNetworks/subnets[*].serviceEndpoints[*].service"
+                            }
+                        ]
+                    },
+                    "roleDefinitionIds": [
+                        "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                    ],
+                    "type": "Microsoft.Network/virtualNetworks/subnets"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,96 @@
+{
+    "name": "az-061-enforce-hub",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-061-enforce-hub",
+        "description": "(az-061):Audits whether or not Hybrid Use Benefit is enabled for Windows VMsenforce-hub",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "anyOf": [
+                            {
+                                "allOf": [
+                                    {
+                                        "equals": "MicrosoftWindowsServer",
+                                        "field": "Microsoft.Compute/imagePublisher"
+                                    },
+                                    {
+                                        "equals": "WindowsServer",
+                                        "field": "Microsoft.Compute/imageOffer"
+                                    },
+                                    {
+                                        "field": "Microsoft.Compute/imageSKU",
+                                        "in": [
+                                            "2008-R2-SP1",
+                                            "2008-R2-SP1-smalldisk",
+                                            "2012-Datacenter",
+                                            "2012-Datacenter-smalldisk",
+                                            "2012-R2-Datacenter",
+                                            "2012-R2-Datacenter-smalldisk",
+                                            "2016-Datacenter",
+                                            "2016-Datacenter-Server-Core",
+                                            "2016-Datacenter-Server-Core-smalldisk",
+                                            "2016-Datacenter-smalldisk",
+                                            "2016-Datacenter-with-Containers",
+                                            "2016-Datacenter-with-RDSH"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "field": "Microsoft.Compute/imageId",
+                                "like": "/subscriptions/c72daa19-9a38-4155-b2c6-9121045a0fdc/resourceGroups/PZI-GXUS-S-RGP-IMGP-P001/providers/Microsoft.Compute/galleries/PwCSIG_West/images/AZU_Win*"
+                            },
+                            {
+                                "field": "Microsoft.Compute/imageId",
+                                "like": "/subscriptions/2477531f-6332-49ab-bda7-2a5612a03e35/resourceGroups/PZI-GXSE-S-RGP-IMGP-P001/providers/Microsoft.Compute/galleries/PwCSIG_East/images/AZU_Win*"
+                            },
+                            {
+                                "field": "Microsoft.Compute/imageId",
+                                "like": "/subscriptions/9209f19c-0425-4a3d-85ce-8988a4a0a6f6/resourceGroups/PZI-GXEU-S-RGP-IMGP-P001/providers/Microsoft.Compute/galleries/PwCSIG_Central/images/AZU_Win*"
+                            }
+                        ]
+                    },
+                    {
+                        "field": "type",
+                        "in": [
+                            "Microsoft.Compute/virtualMachines",
+                            "Microsoft.Compute/VirtualMachineScaleSets"
+                        ]
+                    },
+                    {
+                        "field": "Microsoft.Compute/licenseType",
+                        "notEquals": "Windows_Server"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

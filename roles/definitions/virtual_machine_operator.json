@@ -1,0 +1,21 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom to allow powering VMs off and on without granting access to data.",
+    "name": "e5136d61-78b3-435a-9f30-bac8c7a1e43f",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Compute/*/read",
+          "Microsoft.Compute/virtualMachines/start/action",
+          "Microsoft.Compute/virtualMachines/restart/action",
+          "Microsoft.Compute/virtualMachines/deallocate/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Virtual Machine Operator",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

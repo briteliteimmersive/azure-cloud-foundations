@@ -1,0 +1,62 @@
+{
+    "name": "az-012-enforce-cognitive-services-accounts-prevent-pna",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-012-enforce-cognitive-services-accounts-prevent-pna",
+        "description": "(az-012): CognitiveServices accounts should disable public network access; Disabling public network access improves security by ensuring that the Custom Vision account isn't exposed on the public internet. Creating private endpoints can limit exposure of Custom Vision accounts.",
+        "metadata": {
+        "version": "1.0.0",
+        "category": "CognitiveServices"
+        },
+        "parameters": {
+        "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+            ],
+            "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+                }
+            }
+        },
+        "policyRule": {
+        "if": {
+            "allOf": [
+            {
+                "equals": "Microsoft.CognitiveServices/accounts",
+                "field": "type"
+            },
+            {
+                "field": "kind",
+                "like": "CustomVision*"
+            },
+            {
+                "field": "Microsoft.CognitiveServices/accounts/publicNetworkAccess",
+                "notEquals": "Disabled"
+            },
+            {
+                "count": {
+                "field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+                "where": {
+                    "equals": "VirtualNetworks",
+                    "field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+                }
+                },
+                "greater": 0
+            }
+            ]
+        },
+        "then": {
+            "effect": "[parameters('effect')]"
+        }
+        }
+    }
+}

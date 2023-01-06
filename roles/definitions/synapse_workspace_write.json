@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "This role is a replacement for the Data Factory Engieer role.",
+    "name": "f47badcf-c758-4e25-9176-b91538c2a4bd",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Synapse/workspaces/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Synapse Workspace Write",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

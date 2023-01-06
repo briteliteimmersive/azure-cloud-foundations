@@ -1,0 +1,31 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Grants actions provided by both contributor types in one RBAC slot for RBAC-limited subscriptions",
+    "name": "ee7531d5-0016-4545-99c2-a61f7198b3f1",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.Insights/components/*",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Support/*",
+          "Microsoft.Web/certificates/*",
+          "Microsoft.Web/hostingEnvironments/Join/Action",
+          "Microsoft.Web/listSitesAssignedToHostName/read",
+          "Microsoft.Web/serverFarms/*",
+          "Microsoft.Web/serverFarms/join/action",
+          "Microsoft.Web/serverFarms/read",
+          "Microsoft.Web/sites/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Website and Web Plan Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

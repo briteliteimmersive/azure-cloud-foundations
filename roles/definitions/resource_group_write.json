@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role for for use by the Backup Team.  Restores require this role which has the write action on resource groups.",
+    "name": "9b6b71ae-9717-426e-be73-b246d91e3fb2",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Resources/subscriptions/resourceGroups/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Resource Group Write",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

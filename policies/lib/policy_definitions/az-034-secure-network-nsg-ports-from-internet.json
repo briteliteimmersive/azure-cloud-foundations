@@ -1,0 +1,153 @@
+{
+    "name": "az-034-secure-network-nsg-ports-from-internet",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-034-secure-network-nsg-ports-from-internet",
+        "description": "(az-034) : This policy ensures that any given NSG is denying outbound access over prohibited port numbers as defined in NGS SecurityRules and includes filter to ignore App Gateway V2 security rules Audits use of Network Security Group rules that allow ingress traffic to sensitive ports from the internet",
+        "metadata": {
+            "version": "2.0",
+            "category": "Network"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "field": "type"
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                                        "in": [
+                                            "*",
+                                            "21",
+                                            "22",
+                                            "23",
+                                            "25",
+                                            "53",
+                                            "69",
+                                            "110",
+                                            "113",
+                                            "135",
+                                            "137",
+                                            "138",
+                                            "139",
+                                            "143",
+                                            "161",
+                                            "389",
+                                            "445",
+                                            "520",
+                                            "591",
+                                            "636",
+                                            "1080",
+                                            "2323",
+                                            "2375",
+                                            "2376",
+                                            "3389",
+                                            "5800",
+                                            "5900",
+                                            "5901",
+                                            "5902",
+                                            "5903",
+                                            "8008",
+                                            "8080",
+                                            "8443",
+                                            "8081",
+                                            "8082",
+                                            "8888"
+                                        ]
+                                    },
+                                    {
+                                        "not": {
+                                            "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+                                            "notEquals": "*"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "equals": "Allow",
+                                "field": "Microsoft.Network/networkSecurityGroups/securityRules/access"
+                            },
+                            {
+                                "equals": "Inbound",
+                                "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction"
+                            },
+                            {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+                                        "in": [
+                                            "*",
+                                            "Internet"
+                                        ]
+                                    },
+                                    {
+                                        "not": {
+                                            "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefixes[*]",
+                                            "notIn": [
+                                                "*",
+                                                "Internet"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "equals": "anyanyinbound",
+                                    "field": "name"
+                                },
+                                {
+                                    "count": {
+                                        "name": "ExcludedNSGs",
+                                        "value": [
+                                            "-T2-NSG-EGRF-",
+                                            "-T2-NSG-INGF-",
+                                            "-T2-NSG-INTF-"
+                                        ],
+                                        "where": {
+                                            "contains": "[current('excludedNSGs')]",
+                                            "field": "id"
+                                        }
+                                    },
+                                    "greater": 0
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

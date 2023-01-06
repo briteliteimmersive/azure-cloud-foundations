@@ -1,0 +1,44 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Expands the builtin Tag Contributor role which can manage tags on entities, without providing access to the entities themselves.  Currently only works for RGs and Storage accounts.",
+    "name": "af5ae95e-a20f-4e45-827e-f1421bfb59f7",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Storage/storageAccounts/read",
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Resources/subscriptions/resourceGroups/resources/read",
+          "Microsoft.Resources/subscriptions/resources/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.Support/*",
+          "Microsoft.Resources/tags/*",
+          "Microsoft.ApiManagement/service/apis/operations/tags/*",
+          "Microsoft.ApiManagement/service/apis/operationsByTags/read",
+          "Microsoft.ApiManagement/service/apis/tagDescriptions/*",
+          "Microsoft.ApiManagement/service/apis/tags/*",
+          "Microsoft.ApiManagement/service/apisByTags/read",
+          "Microsoft.ApiManagement/service/products/tags/*",
+          "Microsoft.ApiManagement/service/productsByTags/read",
+          "Microsoft.ApiManagement/service/tagResources/read",
+          "Microsoft.ApiManagement/service/tags/*",
+          "Microsoft.Consumption/externalBillingAccounts/tags/read",
+          "Microsoft.Consumption/externalSubscriptions/tags/read",
+          "Microsoft.Consumption/tags/read",
+          "Microsoft.Network/azureFirewallFqdnTags/read",
+          "Microsoft.Network/locations/serviceTags/read",
+          "Microsoft.Resources/subscriptions/tagNames/*",
+          "Microsoft.Resources/subscriptions/tagNames/tagValues/*",
+          "Microsoft.Resources/subscriptions/resourcegroups/write",
+          "Microsoft.Storage/storageAccounts/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Tag Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

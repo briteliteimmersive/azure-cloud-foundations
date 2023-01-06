@@ -1,0 +1,55 @@
+{
+    "name": "az-022-enforce-storage-sa-require-cmkey-encrypt",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-022-enforce-storage-sa-require-cmkey-encrypt",
+        "description": "(az-022) : Data Lake Gen2 account encryption scopes should use customer-managed keys to encrypt data at rest;Use customer-managed keys to manage the encryption at rest of your Data Lake Gen2 account encryption scopes. Customer-managed keys enable the data to be encrypted with an Azure key-vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Storage"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Storage/storageAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "true",
+                        "field": "Microsoft.Storage/storageAccounts/isHnsEnabled"
+                    },
+                    {
+                        "not": {
+                            "equals": "Microsoft.Keyvault",
+                            "field": "Microsoft.Storage/storageAccounts/encryption.keySource"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

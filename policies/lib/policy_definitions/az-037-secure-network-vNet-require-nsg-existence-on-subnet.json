@@ -1,0 +1,105 @@
+{
+    "name": "az-037-secure-network-vnet-require-nsg-existence-on-subnet",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-037-secure-network-vnet-require-nsg-existence-on-subnet",
+        "description": "(az-037) : Policy enforces the requirement that all subnet service endpoints are enabled when subnet is created or modified",
+        "metadata": {
+            "version": "1.0",
+            "category": "Network"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "anyOf": [
+                            {
+                                "allOf": [
+                                    {
+                                        "equals": "Microsoft.Network/virtualNetworks/subnets",
+                                        "field": "type"
+                                    },
+                                    {
+                                        "exists": "false",
+                                        "field": "Microsoft.Network/virtualNetworks/subnets/networkSecurityGroup.id"
+                                    },
+                                    {
+                                        "field": "name",
+                                        "notIn": [
+                                            "AzureBastionSubnet",
+                                            "GatewaySubnet",
+                                            "AzureFirewallSubnet",
+                                            "AzureFirewallManagementSubnet"
+                                        ]
+                                    },
+                                    {
+                                        "equals": 0,
+                                        "value": "[length(field('Microsoft.Network/virtualNetworks/subnets/privateEndpoints[*]'))]"
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "equals": "Microsoft.Network/virtualNetworks",
+                                        "field": "type"
+                                    },
+                                    {
+                                        "count": {
+                                            "field": "Microsoft.Network/virtualNetworks/subnets[*]",
+                                            "where": {
+                                                "allOf": [
+                                                    {
+                                                        "exists": "false",
+                                                        "field": "Microsoft.Network/virtualNetworks/subnets[*].networkSecurityGroup.id"
+                                                    },
+                                                    {
+                                                        "field": "Microsoft.Network/virtualNetworks/subnets[*].name",
+                                                        "notIn": [
+                                                            "AzureBastionSubnet",
+                                                            "GatewaySubnet",
+                                                            "AzureFirewallSubnet",
+                                                            "AzureFirewallManagementSubnet"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "equals": 0,
+                                                        "value": "[length(field('Microsoft.Network/virtualNetworks/subnets[*].privateEndpoints[*]'))]"
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        "notEquals": 0
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,64 @@
+{
+	"name": "az-003-enforce-cognitive-services-accounts-require-owned-sa",
+	"type": "Microsoft.Authorization/policyDefinitions",
+	"apiVersion": "2021-06-01",
+	"scope": null,
+	"properties": {
+		"policyType": "Custom",
+		"mode": "Indexed",
+		"displayName":"az-003-enforce-cognitive-services-accounts-require-owned-sa",
+		"description": "(az-003): Cognitive Services accounts should use customer owned storage; Use customer owned storage to control the data stored at rest in Cognitive Services for CustomVision Kinds. To learn more about customer owned storage, visit https://aka.ms/cogsvc-cmk.",
+		"metadata": {
+		"version": "1.0.0",
+		"category": "Cognitive Services"
+		},
+		"parameters": {
+		"effect": {
+			"type": "String",
+			"defaultValue": "Deny",
+			"allowedValues": [
+			"Audit",
+			"Deny",
+			"Disabled"
+			],
+			"metadata": {
+			"displayName": "Effect",
+			"description": "Enable or disable the execution of the policy"
+			}
+		}
+		},
+		"policyRule": {
+			"if": {
+			"allOf": [
+				{
+				"equals": "Microsoft.CognitiveServices/accounts",
+				"field": "type"
+				},
+				{
+				"field": "kind",
+				"like": "CustomVision*"
+				},
+				{
+				"count": {
+					"field": "Microsoft.CognitiveServices/accounts/userOwnedStorage[*]"
+				},
+				"less": 1
+				},
+				{
+				"count": {
+					"field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+					"where": {
+					"equals": "CustomerManagedStorage",
+					"field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+					}
+				},
+				"greater": 0
+				}
+			]
+			},
+			"then": {
+			"effect": "[parameters('effect')]"
+			}
+		}
+	}
+}

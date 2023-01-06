@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role used to join an app service environment.",
+    "name": "90bac3e3-ea1a-4432-91fb-283ad6ecc291",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Web/hostingEnvironments/join/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " App Service Plan Joiner",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

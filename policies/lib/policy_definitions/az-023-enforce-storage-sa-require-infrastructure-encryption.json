@@ -1,0 +1,61 @@
+{
+    "name": "az-023-enforce-storage-sa-require-infrastructure-encryption",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-023-enforce-storage-sa-require-infrastructure-encryption",
+        "description": "(az-023) : Data Lake Gen2 accounts should have infrastructure encryption; Enable infrastructure encryption for higher level of assurance that the data is secure. When infrastructure encryption is enabled, data in a storage account is encrypted twice.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Storage"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            },
+            "exemptstorageaccounts": {
+                "type": "Array",
+                "defaultValue": []
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Storage/storageAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "true",
+                        "field": "Microsoft.Storage/storageAccounts/isHnsEnabled"
+                    },
+                    {
+                        "field": "Microsoft.Storage/storageAccounts/encryption.requireInfrastructureEncryption",
+                        "notEquals": "true"
+                    },
+                    {
+                        "field": "name",
+                        "notIn": "[parameters('exemptstorageaccounts')]"
+                      }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role for all things monitorning",
+    "name": "799cac49-8bc1-4a5d-a824-4d1e8cdf148c",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.OperationalInsights/workspaces/search/action",
+          "Microsoft.Insights/actiongroups/*"
+
+
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Monitorning Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

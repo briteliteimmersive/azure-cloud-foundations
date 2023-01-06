@@ -1,0 +1,52 @@
+{
+    "name": "az-067-applicationgateway-enforce-backendhttpssettings",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-067-applicationgateway-enforce-backendhttpssettings",
+        "description": "(az-067):enfoce use of HTTPS in app-gateway backend-http-settingsapplicationgateway-enforce-backendHTTPSSettings",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/applicationGateways",
+                        "field": "type"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Network/applicationGateways/backendHttpSettingsCollection[*].protocol",
+                                "notEquals": "Https"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

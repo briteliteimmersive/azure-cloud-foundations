@@ -1,0 +1,254 @@
+{
+    "name": "az-050-secure-network-nsg-ports-to-internet-v2",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-050-secure-network-nsg-ports-to-internet-v2",
+        "description": "(az-050) : This policy ensures that any given NSG is denying outbound access over prohibited port numbers as defined in NGS SecurityRules and includes filter to ignore App Gateway V2 security rule",
+        "metadata": {
+            "version": "2.0",
+            "category": "Network"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/networkSecurityGroups/securityRules",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "contains": "-nsw-",
+                                    "field": "id"
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "name",
+                                                    "in": [
+                                                        "APPGW_INTERNET_OUTBOUND_TCP",
+                                                        "APPGW_INTERNET_OUTBOUND_UDP",
+                                                        "APP_GW-3"
+                                                    ]
+                                                },
+                                                {
+                                                    "equals": "Allow",
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/access"
+                                                },
+                                                {
+                                                    "equals": "Outbound",
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction"
+                                                },
+                                                {
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationAddressPrefix",
+                                                    "in": [
+                                                        "Internet",
+                                                        "*"
+                                                    ]
+                                                },
+                                                {
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/priority",
+                                                    "in": [
+                                                        700,
+                                                        701,
+                                                        303
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "allOf": [
+                                                {
+                                                    "field": "name",
+                                                    "in": [
+                                                        "APP_GW-0",
+                                                        "APP_GW-1",
+                                                        "APP_GW-2"
+                                                    ]
+                                                },
+                                                {
+                                                    "equals": "Allow",
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/access"
+                                                },
+                                                {
+                                                    "equals": "Inbound",
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction"
+                                                },
+                                                {
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+                                                    "in": [
+                                                        "GatewayManager",
+                                                        "AzureLoadBalancer",
+                                                        "VirtualNetwork"
+                                                    ]
+                                                },
+                                                {
+                                                    "field": "Microsoft.Network/networkSecurityGroups/securityRules/priority",
+                                                    "in": [
+                                                        270,
+                                                        271,
+                                                        272
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRange",
+                                        "in": [
+                                            "*",
+                                            "21",
+                                            "22",
+                                            "23",
+                                            "25",
+                                            "69",
+                                            "110",
+                                            "113",
+                                            "135",
+                                            "137",
+                                            "138",
+                                            "139",
+                                            "143",
+                                            "161",
+                                            "389",
+                                            "520",
+                                            "591",
+                                            "636",
+                                            "1080",
+                                            "2323",
+                                            "2375",
+                                            "2376",
+                                            "3389",
+                                            "5800",
+                                            "5900",
+                                            "5901",
+                                            "5902",
+                                            "5903",
+                                            "8008",
+                                            "8080",
+                                            "8443",
+                                            "8081",
+                                            "8082",
+                                            "8888"
+                                        ]
+                                    },
+                                    {
+                                        "not": {
+                                            "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationPortRanges[*]",
+                                            "notEquals": "*"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "equals": "Allow",
+                                "field": "Microsoft.Network/networkSecurityGroups/securityRules/access"
+                            },
+                            {
+                                "equals": "Outbound",
+                                "field": "Microsoft.Network/networkSecurityGroups/securityRules/direction"
+                            },
+                            {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationAddressPrefix",
+                                        "in": [
+                                            "*",
+                                            "Internet"
+                                        ]
+                                    },
+                                    {
+                                        "not": {
+                                            "field": "Microsoft.Network/networkSecurityGroups/securityRules/destinationAddressPrefixes[*]",
+                                            "notIn": [
+                                                "*",
+                                                "Internet"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "equals": "anyanyoutbound",
+                                    "field": "name"
+                                },
+                                {
+                                    "count": {
+                                        "name": "ExcludedNSGs",
+                                        "value": [
+                                            "-T2-NSG-EGRF-",
+                                            "-T2-NSG-INGF-",
+                                            "-T2-NSG-INTF-"
+                                        ],
+                                        "where": {
+                                            "contains": "[current('excludedNSGs')]",
+                                            "field": "id"
+                                        }
+                                    },
+                                    "greater": 0
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "equals": "Deny",
+                                    "value": "[parameters('effect')]"
+                                },
+                                {
+                                    "exists": "true",
+                                    "field": "tags.enforcementId"
+                                },
+                                {
+                                    "contains": "CS0PEPSP2_026",
+                                    "field": "tags['enforcementId']"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

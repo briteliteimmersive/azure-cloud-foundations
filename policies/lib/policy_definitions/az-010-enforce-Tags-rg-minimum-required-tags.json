@@ -1,0 +1,110 @@
+{
+
+    "name":  "az-010-enforce-tags-rg-minimum-required-tags",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "description":"(az-010): Enforces Minimum Tagging Requirements for Resource Groups",
+        "displayName":"az-010-enforce-tags-rg-minimum-required-tags",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Tags"
+        },
+        "parameters": {
+            "effect": {
+            "type": "String",
+            "defaultValue": "Audit",
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+                }
+            },
+            "tagNames": {
+                "type": "Array",
+                "allowedValues": [
+                    "businessunit",
+                    "appid",
+                    "costcenter",
+                    "environment",
+                    "los",
+                    "businessowner",
+                    "app-support-queue",
+                    "srid",
+                    "criticality",
+                    "deployed-by"
+                    ],
+                "defaultValue": [
+                    "businessunit",
+                    "appid",
+                    "costcenter",
+                    "environment",
+                    "los",
+                    "businessowner",
+                    "app-support-queue",
+                    "srid",
+                    "criticality",
+                    "deployed-by"
+                    ],
+                "metadata": {
+                        "description": "Name of the tag, such as 'businessowner'",
+                        "displayName": "Required Tag Names"
+                    }
+                }
+        },
+        "policyRule": {
+            "if": {
+            "allOf": [
+                {
+                "equals": "Microsoft.Resources/subscriptions/resourceGroups",
+                "field": "type"
+                },
+                {
+                "allOf": [
+                    {
+                    "exists": true,
+                    "field": "tags"
+                    },
+                    {
+                    "count": {
+                        "name": "tagName",
+                        "value": "[parameters('tagNames')]",
+                        "where": {
+                        "not": {
+                            "containsKey": "[current('tagName')]",
+                            "field": "tags"
+                        }
+                        }
+                    },
+                    "greater": 0
+                    }
+                ]
+                },
+                {
+                "count": {
+                    "name": "ExcludedRG",
+                    "value": [
+                    "NetworkWatcherRG*"
+                    ],
+                    "where": {
+                    "field": "name",
+                    "like": "[current('excludedRG')]"
+                    }
+                },
+                "equals": 0
+                }
+            ]
+            },
+            "then": {
+            "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

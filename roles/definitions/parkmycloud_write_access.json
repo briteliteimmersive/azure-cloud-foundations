@@ -1,0 +1,43 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "ParkMyCloud access policy. Includes write access to resoruces. Jan 25 2021 ",
+    "name": "a70d0b2e-7e09-4cac-96fa-1a7a12f9f1b4",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Capacity/reservationOrders/*/read",
+          "Microsoft.Commerce/*/read",
+          "Microsoft.Compute/*/read",
+          "Microsoft.Compute/virtualMachines/start/action",
+          "Microsoft.Compute/virtualMachines/deallocate/action",
+          "Microsoft.Compute/virtualMachines/write",
+          "Microsoft.Compute/virtualMachineScaleSets/write",
+          "Microsoft.Compute/virtualMachineScaleSets/start/action",
+          "Microsoft.Compute/virtualMachineScaleSets/deallocate/action",
+          "Microsoft.Consumption/*/read",
+          "Microsoft.ContainerService/managedClusters/agentPools/read",
+          "Microsoft.ContainerService/managedClusters/read",
+          "Microsoft.Insights/*/read",
+          "Microsoft.Insights/AutoscaleSettings/Write",
+          "Microsoft.Network/networkInterfaces/read",
+          "Microsoft.Network/publicIPAddresses/read",
+          "Microsoft.Resources/subscriptions/*/read",
+          "Microsoft.Sql/managedInstances/*/read",
+          "Microsoft.Sql/managedInstances/write",
+          "Microsoft.Sql/servers/databases/*/read",
+          "Microsoft.Sql/servers/databases/pause/action",
+          "Microsoft.Sql/servers/databases/resume/action",
+          "Microsoft.Sql/servers/databases/write",
+          "Microsoft.Sql/servers/read",
+          "Microsoft.Sql/servers/elasticPools/*/read",
+          "Microsoft.Sql/servers/elasticPools/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "ParkMyCloud Write Access",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

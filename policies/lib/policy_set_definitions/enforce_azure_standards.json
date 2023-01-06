@@ -1,0 +1,181 @@
+{
+  "name": "enforce-azure-standards",
+  "type": "Microsoft.Authorization/policySetDefinitions",
+  "apiVersion": "2021-06-01",
+  "scope": null,
+  "properties": {
+    "policyType": "Custom",
+    "displayName": "enforce-azure-standards",
+    "description": "enforce-azure-standards",
+    "metadata": {},
+    "parameters": {
+      "az-007-enforce-general-resource-allowed-locations": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-007-enforce-general-resource-allowed-locations",
+          "description": "(az-007): This policy restricts the Locations (Azure regions) where resources can be deployed"
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny"
+      },
+      "az-009-enforce-tags-resource-minimum-required-tags": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-009-enforce-tags-resource-minimum-required-tags",
+          "description": "(az-009): Required Resource Tagging using specific TagName with blank value prevention"
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny"
+      },
+      "az-010-enforce-tags-rg-minimum-required-tags": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-010-enforce-tags-rg-minimum-required-tags",
+          "description": "(az-010): Enforces Minimum Tagging Requirements for Resource Groups"
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny"
+      },
+      "az-017-enforce-databricks-workspaces-require-premium-sku": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-017-enforce-databricks-workspaces-require-premium-sku",
+          "description": "(az-017) : The policy create Databricks workspaces with Premium sku feature to unlock advanced security features."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny"
+      },
+      "az-021-enforce-storage-sa-prevent-shared-access-key": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-021-enforce-storage-sa-prevent-shared-access-key",
+          "description": "(az-017) : The policy create Databricks workspaces with Premium sku feature to unlock advanced security features."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny"
+      },   
+      "az-056-enforce-general-resources-allowed-resourcetypes": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-056-enforce-general-resources-allowed-resourcetypes",
+          "description": "(az-056) : This policy ensures only approved resource types are deployed"
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Disabled"
+      },   
+      "az-065-enforce-disk-encryption-any": {
+        "type": "String",
+        "metadata": {
+          "displayName": "az-065-enforce-disk-encryption-any",
+          "description": "(az-065):enforce use of encrypted data disksenforce-disk-encryption-any"
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit"
+      }
+    },
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "az-007-enforce-general-resource-allowed-locations",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-007-enforce-general-resource-allowed-locations",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-007-enforce-general-resource-allowed-locations')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-009-enforce-tags-resource-minimum-required-tags",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-009-enforce-tags-resource-minimum-required-tags",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-009-enforce-tags-resource-minimum-required-tags')]"
+          },
+          "tagName": {
+            "value": "businessowner"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-010-enforce-tags-rg-minimum-required-tags",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-010-enforce-tags-rg-minimum-required-tags",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-010-enforce-tags-rg-minimum-required-tags')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-017-enforce-databricks-workspaces-require-premium-sku",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-017-enforce-databricks-workspaces-require-premium-sku",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-017-enforce-databricks-workspaces-require-premium-sku')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-021-enforce-storage-sa-prevent-shared-access-key",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-021-enforce-storage-sa-prevent-shared-access-key",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-021-enforce-storage-sa-prevent-shared-access-key')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-056-enforce-general-resources-allowed-resourcetypes",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-056-enforce-general-resources-allowed-resourcetypes",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-056-enforce-general-resources-allowed-resourcetypes')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-065-enforce-disk-encryption-any",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-065-enforce-disk-encryption-any",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-065-enforce-disk-encryption-any')]"
+          }
+        },
+        "groupNames": []
+      }
+    ],
+    "policyDefinitionGroups": null
+  }
+}

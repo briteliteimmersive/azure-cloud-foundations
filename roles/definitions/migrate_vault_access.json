@@ -1,0 +1,35 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role for Vault Access",
+    "name": "1d95de7b-6fa9-4aef-9440-9b95c9d75602",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/*/read",
+          "Microsoft.RecoveryServices/locations/allocatedStamp/read",
+          "Microsoft.RecoveryServices/locations/allocateStamp/action",
+          "Microsoft.RecoveryServices/Vaults/read",
+          "Microsoft.RecoveryServices/vaults/replicationEvents/read",
+          "Microsoft.RecoveryServices/vaults/replicationFabrics/read",
+          "Microsoft.RecoveryServices/vaults/replicationJobs/*",
+          "Microsoft.RecoveryServices/vaults/replicationPolicies/*",
+          "Microsoft.RecoveryServices/vaults/replicationRecoveryPlans/*",
+          "Microsoft.RecoveryServices/vaults/replicationFabrics/replicationvCenters/*",
+          "Microsoft.RecoveryServices/Vaults/usages/read",
+          "Microsoft.RecoveryServices/Vaults/vaultTokens/read",
+          "Microsoft.RecoveryServices/Vaults/usages/read",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Storage/storageAccounts/read",
+          "Microsoft.RecoveryServices/vaults/replicationOperationStatus/read"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Migrate Vault Access",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

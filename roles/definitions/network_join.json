@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role for join operations on a subnet.",
+    "name": "74d54d2a-f4c6-4591-a942-109fdfba4b70",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Network/virtualNetworks/subnets/join/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Network Join",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

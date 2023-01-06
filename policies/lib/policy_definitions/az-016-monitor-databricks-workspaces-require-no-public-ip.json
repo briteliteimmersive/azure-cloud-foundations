@@ -1,0 +1,49 @@
+{
+    "name": "az-016-monitor-databricks-workspaces-require-no-public-ip",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-016-monitor-databricks-workspaces-require-no-public-ip",
+        "description": "(az-016) :  The policy configure Databricks clusters with noPublicIP feature so traffic between the control plane and clusters exclusively over private networks.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "DataBricks"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Databricks/workspaces",
+                        "field": "type"
+                    },
+                    {
+                        "field": "Microsoft.DataBricks/workspaces/parameters.enableNoPublicIp.value",
+                        "notEquals": "true"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

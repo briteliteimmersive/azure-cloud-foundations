@@ -1,0 +1,20 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Lets you perform read only actions on DMS service/project/tasks.",
+    "name": "8ed90eaf-17cb-4c83-bc4c-9f429e5ccdd6",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Network/networkInterfaces/ipConfigurations/read",
+          "Microsoft.DataMigration/*/read",
+          "Microsoft.Resources/subscriptions/resourceGroups/read"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Database Migration Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

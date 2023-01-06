@@ -1,0 +1,132 @@
+{
+    "name": "az-009-enforce-tags-resource-minimum-required-tags",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "description": "(az-009): Required Resource Tagging using specific TagName with blank value prevention",
+        "displayName": "az-009-enforce-tags-resource-minimum-required-tags",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Tags"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "defaultValue": "Deny",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                }
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "description": "Name of the tag, such as 'businessowner' to enforce for Resources",
+                    "displayName": "Tag Name"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+            "allOf": [
+                {
+                "anyOf": [
+                    {
+                    "not": {
+                        "exists": "true",
+                        "field": "[concat('tags[', parameters('tagName'), ']')]"
+                    }
+                    },
+                    {
+                    "Equals": "",
+                    "value": "[concat('tags[', parameters('tagName'), ']')]"
+                    }
+                ]
+                },
+                {
+                "not": {
+                    "exists": "true",
+                    "field": "tags['aksEngineVersion']"
+                }
+                },
+                {
+                "not": {
+                    "like": "mc_*",
+                    "value": "[resourceGroup().name]"
+                }
+                },
+                {
+                "not": {
+                    "like": "NetworkWatcherRG*",
+                    "value": "[resourceGroup().name]"
+                }
+                },
+                {
+                "count": {
+                    "name": "likePattern",
+                    "value": [
+                    "aks-agentpool-*-routetable",
+                    "k8s-master-*-routetable",
+                    "ASRSeed*"
+                    ],
+                    "where": {
+                    "field": "name",
+                    "like": "[current('likePattern')]"
+                    }
+                },
+                "equals": 0
+                },
+                {
+                "field": "type",
+                "notIn": [
+                    "Microsoft.AAD/domainServices",
+                    "microsoft.alertsmanagement/actionrules",
+                    "microsoft.alertsManagement/smartDetectorAlertRules",
+                    "Microsoft.Automation/automationAccounts/configurations",
+                    "Microsoft.Compute/restorePointCollections",
+                    "Microsoft.Compute/virtualMachines/extensions",
+                    "Microsoft.Compute/virtualMachineScaleSets/extensions",
+                    "Microsoft.DevTestLab/schedules",
+                    "Microsoft.insights/actiongroups",
+                    "microsoft.insights/activityLogAlerts",
+                    "microsoft.insights/metricalerts",
+                    "microsoft.insights/scheduledqueryrules",
+                    "Microsoft.Migrate/assessmentProjects",
+                    "Microsoft.NetApp/netAppAccounts/capacityPools/volumes",
+                    "microsoft.network/networkintentpolicies",
+                    "Microsoft.Network/networkWatchers/connectionMonitors",
+                    "Microsoft.Network/networkWatchers/flowLogs",
+                    "Microsoft.OffAzure/VMwareSites",
+                    "Microsoft.OperationsManagement/solutions",
+                    "Microsoft.StorageSync/storageSyncServices",
+                    "Microsoft.StreamAnalytics/streamingjobs",
+                    "Microsoft.Web/certificates",
+                    "microsoft.security/automations",
+                    "microsoft.network/serviceendpointpolicies",
+                    "microsoft.sql/virtualclusters",
+                    "microsoft.web/connections",
+                    "microsoft.sqlvirtualmachine/sqlvirtualmachines",
+                    "microsoft.sql/managedinstances/databases",
+                    "microsoft.operationalinsights/workspaces",
+                    "microsoft.migrate/movecollections",
+                    "microsoft.insights/datacollectionrules",
+                    "microsoft.eventgrid/systemtopics",
+                    "microsoft.datadog/monitors"
+                ]
+                }
+            ]
+            },
+            "then": {
+            "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

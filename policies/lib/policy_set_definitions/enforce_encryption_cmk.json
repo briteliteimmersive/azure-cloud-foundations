@@ -1,0 +1,192 @@
+{
+    "name": "Enforce-Encryption-CMK",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Deny or Audit resources without Encryption with a customer-managed key (CMK)",
+      "description": "Deny or Audit resources without Encryption with a customer-managed key (CMK)",
+      "metadata": {
+        "version": "1.0.0",
+        "category": "Encryption"
+      },
+      "parameters": {
+        "az-014-enforce-cognitive-services-accounts-require-cmkey-encrypt": {
+          "metadata": {
+            "displayName": "az-014-enforce-cognitive-services-accounts-require-cmkey-encrypt",
+            "description": "CognitiveServices accounts encrypted with customer managed key; Customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data stored in Cognitive Services to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management"
+          },
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ]
+        },
+        "az-015-enforce-databricks-workspaces-infrastructure-encryption": {
+          "metadata": {
+            "displayName": "az-015-enforce-databricks-workspaces-infrastructure-encryption",
+            "description": "Configure double encryption for Databricks File System root"
+          },
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ]
+        },
+        "az-022-enforce-storage-sa-require-cmkey-encrypt": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-022-enforce-storage-sa-require-cmkey-encrypt",
+            "description": "Data Lake Gen2 account encryption scopes should use customer-managed keys to encrypt data at rest;Use customer-managed keys to manage the encryption at rest of your Data Lake Gen2 account encryption scopes. Customer-managed keys enable the data to be encrypted with an Azure key-vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management."
+          }
+        },
+        "az-023-enforce-storage-sa-require-infrastructure-encryption": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-023-enforce-storage-sa-require-infrastructure-encryption",
+            "description": "Data Lake Gen2 accounts should have infrastructure encryption; Enable infrastructure encryption for higher level of assurance that the data is secure. When infrastructure encryption is enabled, data in a storage account is encrypted twice.."
+          }
+        },
+        "az-023-exempt-storage-accounts": {
+          "type": "Array",
+          "defaultValue": [],
+          "metadata": {
+            "displayName": "az-023-exempt-storage-accounts",
+            "description": "Parameter used to exempt storage accounts from az-023"
+          }
+        },
+        "az-066-disk-encryption-managed-key-dc2-external-only": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-066-disk-encryption-managed-key-dc2-external-only",
+            "description": "audit use of encrypted data disks with customer managed keydisk-encryption-managed-key-DC2-External-Only"
+          }
+        },
+        "az-072-form-recognizer-enforce-encryption-customermanagedkeys": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-072-form-recognizer-enforce-encryption-customermanagedkeys",
+            "description": "enfoce encryption of data at rest using a customer managed keyform-recognizer-enforce-encryption-customermanagedkeys"
+          }
+        },
+        "az-075-enforce-custom-vision-encryption-customermanagedkey": {
+          "type": "String",
+          "defaultValue": "Audit",
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "metadata": {
+            "displayName": "az-075-enforce-custom-vision-encryption-customermanagedkey",
+            "description": "enforce custom vision service to use encryption with customer managed keyenforce-custom-vision-encryption-customermanagedkey"
+          }
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-014-enforce-cognitive-services-accounts-require-cmkey-encrypt",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-014-enforce-cognitive-services-accounts-require-cmkey-encrypt",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-014-enforce-cognitive-services-accounts-require-cmkey-encrypt')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-015-enforce-databricks-workspaces-infrastructure-encryption",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-015-enforce-databricks-workspaces-infrastructure-encryption",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-015-enforce-databricks-workspaces-infrastructure-encryption')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-022-enforce-storage-sa-require-cmkey-encrypt",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-022-enforce-storage-sa-require-cmkey-encrypt",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-022-enforce-storage-sa-require-cmkey-encrypt')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-023-enforce-storage-sa-require-infrastructure-encryption",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-023-enforce-storage-sa-require-infrastructure-encryption",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-023-enforce-storage-sa-require-infrastructure-encryption')]"
+            },
+            "exemptstorageaccounts": { 
+              "value": "[parameters('az-023-exempt-storage-accounts')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-066-disk-encryption-managed-key-dc2-external-only",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-066-disk-encryption-managed-key-dc2-external-only",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-066-disk-encryption-managed-key-dc2-external-only')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-072-form-recognizer-enforce-encryption-customermanagedkeys",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-072-form-recognizer-enforce-encryption-customermanagedkeys",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-072-form-recognizer-enforce-encryption-customermanagedkeys')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-075-enforce-custom-vision-encryption-customermanagedkey",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-075-enforce-custom-vision-encryption-customermanagedkey",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-075-enforce-custom-vision-encryption-customermanagedkey')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

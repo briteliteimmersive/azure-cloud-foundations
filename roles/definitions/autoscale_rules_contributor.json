@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Can read/write/update auto scale settings.",
+    "name": "a9deba3f-09a3-4bc0-865c-23c3679ae616",
+    "permissions": [
+      {
+        "actions": [
+          "microsoft.insights/autoscaleSettings/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " AutoScale Rules Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }
