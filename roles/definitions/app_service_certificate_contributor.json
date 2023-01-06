@@ -1,0 +1,26 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "In collaberation with Application Developer role, this role allows you to import/create certifcates on a web app",
+    "name": "ab277f7a-db2d-497b-a33f-e54361fc7b6d",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Support/*",
+          "Microsoft.Web/serverFarms/*",
+          "Microsoft.Web/hostingEnvironments/Join/Action",
+          "Microsoft.Insights/autoscalesettings/*"
+      ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "App Service Certificate Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

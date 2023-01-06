@@ -1,0 +1,53 @@
+{
+    "name": "az-069-applicationgateway-enforce-publicip",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-069-applicationgateway-enforce-publicip",
+        "description": "(az-069):Do not let use of public ip address in app-gatewaysapplicationgateway-enforce-publicIP",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/applicationGateways",
+                        "field": "type"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "exists": "true",
+                                "field": "Microsoft.Network/applicationGateways/frontendIPConfigurations[*].publicIPAddress"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

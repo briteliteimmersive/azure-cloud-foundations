@@ -1,0 +1,21 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Turbonomic Azure Migrate Custom role for migrating Turbonomics",
+    "name": "6bdf52d4-5a30-4b98-868f-27b03068814e",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Migrate/migrateprojects/read",
+          "Microsoft.Migrate/migrateprojects/solutions/read",
+          "Microsoft.Migrate/migrateprojects/solutions/getconfig/action",
+          "Microsoft.Migrate/migrateprojects/registerTool/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Turbonomic Azure Migration",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

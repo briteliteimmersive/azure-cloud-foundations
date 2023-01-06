@@ -1,0 +1,89 @@
+{
+    "name": "az-048-secure-storage-sa-require-vnet-acls",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-048-secure-storage-sa-require-vnet-acls",
+        "description": "(az-048) : Require Storage Accounts include Network ACLs such as VNet Integration and/or IP Rules to prevent use of IP 0.0.0.0 addresses",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Storage"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Storage/storageAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "allOf": [
+                                {
+                                    "contains": "-DIAG-",
+                                    "value": "[resourceGroup().name]"
+                                },
+                                {
+                                    "field": "name",
+                                    "like": "*diaglogs"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "allOf": [
+                                    {
+                                        "exists": false,
+                                        "field": "Microsoft.Storage/storageAccounts/networkAcls.virtualNetworkRules[*].id"
+                                    },
+                                    {
+                                        "field": "Microsoft.Storage/storageAccounts/networkAcls.ipRules[*].value",
+                                        "in": [
+                                            "0.0.0.0"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "allOf": [
+                                    {
+                                        "exists": false,
+                                        "field": "Microsoft.Storage/storageAccounts/networkAcls.virtualNetworkRules[*].id"
+                                    },
+                                    {
+                                        "exists": false,
+                                        "field": "Microsoft.Storage/storageAccounts/networkAcls.ipRules"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

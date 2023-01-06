@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Can list storageAccount keys.",
+    "name": "a1a12063-81c4-46da-bf38-30847e2eea4b",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Storage/storageAccounts/listkeys/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Turbonomic Operator ReadOnly",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+}

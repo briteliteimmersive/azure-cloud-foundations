@@ -1,0 +1,247 @@
+{
+    "name": "Deny-PublicPaaSEndpoints",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Public network access should be disabled for PaaS services",
+      "description": "This policy initiative is a group of policies that prevents creation of Azure PaaS services with exposed public endpoints",
+      "metadata": {},
+      "parameters": {
+        "az-012-enforce-cognitive-services-accounts-prevent-pna": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-012-enforce-cognitive-services-accounts-prevent-pna",
+            "description": "CognitiveServices accounts should disable public network access; Disabling public network access improves security by ensuring that the Custom Vision account isn't exposed on the public internet. Creating private endpoints can limit exposure of Custom Vision accounts."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-019-enforce-purview-accounts-prevent-pna": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-019-enforce-purview-accounts-prevent-pna",
+            "description": "CognitiveServices accounts should disable public network access; Disabling public network access improves security by ensuring that the Custom Vision account isn't exposed on the public internet. Creating private endpoints can limit exposure of Custom Vision accounts."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-016-monitor-databricks-workspaces-require-no-public-ip": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-016-monitor-databricks-workspaces-require-no-public-ip",
+            "description": "The policy configure Databricks clusters with noPublicIP feature so traffic between the control plane and clusters exclusively over private networks."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-069-applicationgateway-enforce-publicip": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-069-applicationgateway-enforce-publicip",
+            "description": "Do not let use of public ip address in app-gatewaysapplicationgateway-enforce-publicIP"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-032-enforce-key-vault-vaults-prevent-pna": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-032-enforce-key-vault-vaults-prevent-pna",
+            "description": "KeyVault ACLs must have Default Action set to Deny. This disables public network access to the key vault so that it's not accessible over the public internet. This can reduce data leakage risks. Learn more at: https://aka.ms/akvprivatelink."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-045-secure-storage-sa-blob-prevent-public-access": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-045-secure-storage-sa-blob-prevent-public-access",
+            "description": "Anonymous public read access to containers and blobs in Azure Storage is a convenient way to share data, but might present security risks. To prevent data breaches caused by undesired anonymous access, Microsoft recommends preventing public access to a storage account unless your scenario requires it."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-049-secure-Storage-sa-restrict-public-network-access": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-049-secure-Storage-sa-restrict-public-network-access",
+            "description": "Storage accounts should restrict network access  Require Storage Accounts include Network ACLs such as VNet Integration and/or IP Rules to prevent use of IP 0.0.0.0 addresses: \tThis policy audits any Storage Account not configured to use a virtual network service endpoint "
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-058-enforce-keyvault-acl": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-058-enforce-keyvault-acl",
+            "description": "Audits KeyVault ACLs that don't have a default Deny actionenforce-keyvault-acl"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-074-enforce-custom-vision-disable-public-network-access": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-074-enforce-custom-vision-disable-public-network-access",
+            "description": "enforce custom vision service to disable public network accessenforce-custom-vision-disable-public-network-access"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-077-enforce-custom-vision-restrict-network-access": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-077-enforce-custom-vision-restrict-network-access",
+            "description": "enforce custom vision service to restrict network accessenforce-custom-vision-restrict-network-access"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-012-enforce-cognitive-services-accounts-prevent-pna",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-012-enforce-cognitive-services-accounts-prevent-pna",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-012-enforce-cognitive-services-accounts-prevent-pna')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-016-monitor-databricks-workspaces-require-no-public-ip",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-016-monitor-databricks-workspaces-require-no-public-ip",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-016-monitor-databricks-workspaces-require-no-public-ip')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-019-enforce-purview-accounts-prevent-pna",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-019-enforce-purview-accounts-prevent-pna",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-019-enforce-purview-accounts-prevent-pna')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-069-applicationgateway-enforce-publicip",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-069-applicationgateway-enforce-publicip",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-069-applicationgateway-enforce-publicip')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-032-enforce-key-vault-vaults-prevent-pna",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-032-enforce-key-vault-vaults-prevent-pna",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-032-enforce-key-vault-vaults-prevent-pna')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-045-secure-storage-sa-blob-prevent-public-access",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-045-secure-storage-sa-blob-prevent-public-access",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-045-secure-storage-sa-blob-prevent-public-access')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-049-secure-Storage-sa-restrict-public-network-access",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-049-secure-Storage-sa-restrict-public-network-access",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-049-secure-Storage-sa-restrict-public-network-access')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-058-enforce-keyvault-acl",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-058-enforce-keyvault-acl",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-058-enforce-keyvault-acl')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-074-enforce-custom-vision-disable-public-network-access",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-074-enforce-custom-vision-disable-public-network-access",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-074-enforce-custom-vision-disable-public-network-access')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-077-enforce-custom-vision-restrict-network-access",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-077-enforce-custom-vision-restrict-network-access",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-077-enforce-custom-vision-restrict-network-access')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

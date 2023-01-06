@@ -1,0 +1,23 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Version 2 Networking role allowing to manage UDRs",
+    "name": "776689df-98dd-4d9c-8d30-cfee1761041f",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.Network/virtualNetworks/read",
+          "Microsoft.Network/routeTables/*",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Network/virtualNetworks/subnets/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Route Table Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

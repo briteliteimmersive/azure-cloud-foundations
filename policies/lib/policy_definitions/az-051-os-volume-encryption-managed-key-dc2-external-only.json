@@ -1,0 +1,54 @@
+{
+    "name": "az-091-os-volume-encryption-managed-key-DC2-External-Only",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-051-os-volume-encryption-managed-key-dc2-external-only",
+        "description": "(az-051): Audits VMs with unencrypted OS Disksos-volume-encryption-managed-key-DC2-External-Only",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "AuditIfNotExists",
+                    "Deny"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Compute/disks",
+                        "field": "type"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/encryptionSettingsCollection.enabled",
+                        "notEquals": "true"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": [
+                    {
+                      "field": "Microsoft.Compute/disks/encryptionSettingsCollection.enabled",
+                      "value": true
+                    }
+                  ]
+            }
+        }
+    }
+}

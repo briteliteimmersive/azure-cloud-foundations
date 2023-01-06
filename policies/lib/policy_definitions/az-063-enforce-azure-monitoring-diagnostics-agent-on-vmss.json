@@ -1,0 +1,53 @@
+{
+    "name": "az-063-enforce-azure-monitoring-diagnostics-agent-on-vmss",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-063-enforce-azure-monitoring-diagnostics-agent-on-vmss",
+        "description": "(az-063):Audits Virtual Machine Scale Sets for the Azure Diagnostics Agentenforce-azure-monitoring-diagnostics-agent-on-vmss",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Deny",
+                    "Disabled"
+                  ],
+                "defaultValue": "Deny",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Compute/VirtualMachineScaleSets",
+                        "field": "type"
+                    }
+                ]
+            },
+            "then": {
+                "details": {
+                    "existenceCondition": {
+                        "field": "Microsoft.Compute/virtualMachines/extensions/type",
+                        "in": [
+                            "IaaSDiagnostics",
+                            "LinuxDiagnostic"
+                        ]
+                    },
+                    "type": "Microsoft.Compute/virtualMachineScaleSets/extensions"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

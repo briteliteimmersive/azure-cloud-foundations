@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Has Microsoft.EventGrid/EventSubscriptions/Write to link Storage events across subscriptions.",
+    "name": "038a2927-a682-4b99-a097-1a80ae09212a",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.EventGrid/eventSubscriptions/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "External Storage Events",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+}

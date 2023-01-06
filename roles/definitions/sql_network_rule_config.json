@@ -1,0 +1,21 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "This role is NOT for general use.  This is roles is for a specific purpose for use by a specific applications.",
+    "name": "8d4dac0e-ae8a-4f41-b579-11bbd8b60181",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.Sql/servers/virtualNetworkRules/write",
+          "Microsoft.Network/virtualNetworks/subnets/joinViaServiceEndpoint/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "SQL Network Rule Config",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }
+  

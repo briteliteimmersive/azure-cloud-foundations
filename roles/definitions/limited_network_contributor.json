@@ -1,0 +1,19 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom Role for to allow Microsoft.Network actions in restricted subscriptions at a subscription level.",
+    "name": "587520ff-066f-46b3-96b9-f1b080590341",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Network/*",
+          "Microsoft.Support/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Limited Network Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

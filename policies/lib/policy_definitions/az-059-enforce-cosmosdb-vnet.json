@@ -1,0 +1,48 @@
+{
+    "name": "az-059-enforce-cosmosdb-vnet",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-059-enforce-cosmosdb-vnet",
+        "description": "(az-059):Audits Cosmos DB's use of VNet endpointsenforce-cosmosdb-vnet",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Database"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy.  Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.DocumentDB/databaseAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "exists": false,
+                        "field": "Microsoft.DocumentDB/databaseAccounts/virtualNetworkRules[*].id"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

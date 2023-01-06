@@ -1,0 +1,19 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Create/Update TDE certificate for SQL Managed Instance and SQL Servers",
+    "name": "d4c0873e-079c-4502-86bb-30cf30d35c3d",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Sql/managedInstances/tdeCertificates/action", 
+          "Microsoft.Sql/servers/tdeCertificates/action"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "SQL Managed Instance TDE Admin",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

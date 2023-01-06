@@ -1,0 +1,657 @@
+{
+    "name": "Enforce-Network_Security",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Enforce network security to retain internal connectivity and adding security",
+      "description": "This policy initiative is a group of policies that requires creation of network specific services that add security and availability",
+      "metadata": {},
+      "parameters": {
+        "az-001-enforce-app-service-host-env-require-delegated-subnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-001-enforce-app-service-host-env-require-delegated-subnet",
+            "description": "(az-001): App Service HostingEnvironment(ASE) resources should be delegated to a subnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-006-enforce-databricks-workspaces-require-delegated-subnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-006-enforce-databricks-workspaces-require-delegated-subnet",
+            "description": "(az-006): Deny Databricks workspaces without Vnet injection; Enforces the use of vnet injection for Databricks workspaces. Azure Databricks resources should be delegated to a subnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-008-deny-vnet-peering-to-non-approved-vnets": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-008-deny-vnet-peering-to-non-approved-vnet",
+            "description": "This policy denies the creation of vNet Peerings to non-approved vNets under the assigned scope."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-008-deny-vnet-peering-to-non-approved-vnets-allowedvnets": {
+          "type": "Array",
+          "metadata": {
+            "displayName": "az-008-deny-vnet-peering-to-non-approved-vnet",
+            "description": "This policy denies the creation of vNet Peerings to non-approved vNets under the assigned scope."
+          },
+          "defaultValue": [
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-AE-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-AE-VNT-P001",
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-NE-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-NE-VNT-P001",
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-SE-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-SE-VNT-P001",
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-U1-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-U1-VNT-P001",
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-U3-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-U3-VNT-P001",
+            "/subscriptions/81b95d99-54e4-4e38-b195-447ae00df81b/resourceGroups/VZI-WE-TS-RG-HUB-P001/providers/Microsoft.Network/virtualNetworks/VZI-GX-TS-SUB001-WE-VNT-P001"
+          ]
+        },
+        "az-028-secure-cache-redis-require-firewall-rules": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-028-secure-cache-redis-require-firewall-rules",
+            "description": "(az-028):Audits Redis Cache resources' firewall configurationsaudit-cache-redis-firewall"
+          },
+          "allowedValues": [
+            "AuditIfNotExists",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "AuditIfNotExists"
+        },
+        "az-034-secure-network-nsg-ports-from-internet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-034-secure-network-nsg-ports-from-internet",
+            "description": "(az-034) : This policy ensures that any given NSG is denying outbound access over prohibited port numbers as defined in NGS SecurityRules and includes filter to ignore App Gateway V2 security rules Audits use of Network Security Group rules that allow ingress traffic to sensitive ports from the internet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-035-secure-network-nsg-ports-to-internet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-035-secure-network-nsg-ports-to-internet",
+            "description": "(az-035) : This policy ensures that any given NSG is denying outbound access over prohibited port numbers as defined in NGS SecurityRules and includes filter to ignore App Gateway V2 security rules"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-036-secure-network-routeTables-approved-udr-names": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-036-secure-network-routeTables-approved-udr-names",
+            "description": "(az-036) : Policy enforces the requirement that Only approved Route Table (UDR) naming patternes be usedd for UDR Names"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-037-secure-network-vnet-require-nsg-existence-on-subnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-037-secure-network-vnet-require-nsg-existence-on-subnet",
+            "description": "(az-037) : Policy enforces the requirement that all subnet service endpoints are enabled when subnet is created or modified"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-038-secure-network-vnet-subnets-require-service-endpoints": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-038-secure-network-vnet-subnets-require-service-endpoints",
+            "description": "(az-038) : Policy enforces the requirement that all subnet service endpoints are enabled when subnet is created or modified"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-039-secure-network-vnets-require-service-endpoints-on-subnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-039-secure-network-vnets-require-service-endpoints-on-subnet",
+            "description": "(az-039) : Policy enforces service endpoints on subnet in vNets that have Subnets"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-040-secure-network-vnets-subnets-require-udr-on-subnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-040-secure-network-vnets-subnets-require-udr-on-subnet",
+            "description": "(az-040) : Require only approved UDRs on Subnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-043-secure-sql-servers-firewallrules-sql-firewall": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-043-secure-sql-servers-firewallrules-sql-firewall",
+            "description": "(az-043) : SQL Server firewalls must not be configured to allow unrestricted access from the internet."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-046-secure-storage-sa-require-https": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-046-secure-storage-sa-require-https",
+            "description": "(az-046) : Audits Network Interfaces with associated Public IP addresses"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-048-secure-storage-sa-require-vnet-acls": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-048-secure-storage-sa-require-vnet-acls",
+            "description": "(az-048) : Require Storage Accounts include Network ACLs such as VNet Integration and/or IP Rules to prevent use of IP 0.0.0.0 addresses"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-057-enforce-hdinsight-resides-in-vnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-057-enforce-hdinsight-resides-in-vnet",
+            "description": "(az-057):Audits HD Insights resources that don't use VNet endpointsenforce-hdinsight-resides-in-vnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-059-enforce-cosmosdb-vnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-059-enforce-cosmosdb-vnet",
+            "description": "(az-059):Audits Cosmos DB's use of VNet endpointsenforce-cosmosdb-vnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-067-applicationgateway-enforce-backendhttpssettings": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-067-applicationgateway-enforce-backendhttpssettings",
+            "description": "(az-067):enfoce use of HTTPS in app-gateway backend-http-settingsapplicationgateway-enforce-backendHTTPSSettings"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-068-applicationgateway-enforce-httpslistener": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-068-applicationgateway-enforce-httpslistener",
+            "description": "(az-68):enfoce use of HTTPS in app-gateway's listener settingsapplicationgateway-enforce-HttpsListener"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-080-enforce-subnet-delegation-PaaS": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-080-enforce-subnet-delegation-PaaS",
+            "description": "(az-080):enfoce subnet delegation for PaaS resources to securely communicate with other azure services.enforce-subnet-delegation-PaaS"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-084-deny-appservicefunctionapp-http": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-084-deny-appservicefunctionapp-http",
+            "description": "(az-084):enforce-allowed-udrs-on-subnet"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-085-deny-appservicewebapp-http": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-085-deny-appservicewebapp-http",
+            "description": "Use of HTTPS ensures server/service authentication and protects data in transit from network layer eavesdropping attacks."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-092-deny-machinelearning-publicaccesswhenbehindvnet": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-092-deny-machinelearning-publicaccesswhenbehindvnet",
+            "description": "Denies public network access for Azure Machine Learning workspaces"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-093-deny-machinelearning-publicnetworkaccess": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-093-deny-machinelearning-publicnetworkaccess",
+            "description": "Denies public network access for Azure Machine Learning workspaces"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-094-deny-private-dns-zones": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-094-deny-private-dns-zones",
+            "description": "This policy denies the creation of a private DNS in the current scope, used in combination with policies that create centralized private DNS in connectivity subscription"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-096-deny-publicip": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-096-deny-publicip",
+            "description": "This policy denies creation of Public IPs under the assigned scope"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-097-deny-vnet-peer-cross-sub": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-097-deny-vnet-peer-cross-sub",
+            "description": "This policy denies the creation of vNet Peerings outside of the same subscriptions under the assigned scope."
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        },
+        "az-098-deny-vnet-peering": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-098-deny-vnet-peering",
+            "description": "This policy denies the creation of vNet Peerings under the assigned scope"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        }
+
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-001-enforce-app-service-host-env-require-delegated-subnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-001-enforce-app-service-host-env-require-delegated-subnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-001-enforce-app-service-host-env-require-delegated-subnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-006-enforce-databricks-workspaces-require-delegated-subnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-006-enforce-databricks-workspaces-require-delegated-subnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-006-enforce-databricks-workspaces-require-delegated-subnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-008-deny-vnet-peering-to-non-approved-vnets",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-008-deny-vnet-peering-to-non-approved-vnets",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-008-deny-vnet-peering-to-non-approved-vnets')]"
+            },
+            "allowedVnets": {
+              "value": "[parameters('az-008-deny-vnet-peering-to-non-approved-vnets-allowedvnets')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-028-secure-cache-redis-require-firewall-rules",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-028-secure-cache-redis-require-firewall-rules",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-028-secure-cache-redis-require-firewall-rules')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-034-secure-network-nsg-ports-from-internet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-034-secure-network-nsg-ports-from-internet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-034-secure-network-nsg-ports-from-internet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-035-secure-network-nsg-ports-to-internet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-035-secure-network-nsg-ports-to-internet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-035-secure-network-nsg-ports-to-internet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-036-secure-network-routeTables-approved-udr-names",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-036-secure-network-routeTables-approved-udr-names",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-036-secure-network-routeTables-approved-udr-names')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-037-secure-network-vnet-require-nsg-existence-on-subnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-037-secure-network-vnet-require-nsg-existence-on-subnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-037-secure-network-vnet-require-nsg-existence-on-subnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-038-secure-network-vnet-subnets-require-service-endpoints",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-038-secure-network-vnet-subnets-require-service-endpoints",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-038-secure-network-vnet-subnets-require-service-endpoints')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-039-secure-network-vnets-require-service-endpoints-on-subnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-039-secure-network-vnets-require-service-endpoints-on-subnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-039-secure-network-vnets-require-service-endpoints-on-subnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-040-secure-network-vnets-subnets-require-udr-on-subnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-040-secure-network-vnets-subnets-require-udr-on-subnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-040-secure-network-vnets-subnets-require-udr-on-subnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-043-secure-sql-servers-firewallrules-sql-firewall",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-043-secure-sql-servers-firewallrules-sql-firewall",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-043-secure-sql-servers-firewallrules-sql-firewall')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-046-secure-storage-sa-require-https",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-046-secure-storage-sa-require-https",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-046-secure-storage-sa-require-https')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-048-secure-storage-sa-require-vnet-acls",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-048-secure-storage-sa-require-vnet-acls",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-048-secure-storage-sa-require-vnet-acls')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-057-enforce-hdinsight-resides-in-vnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-057-enforce-hdinsight-resides-in-vnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-057-enforce-hdinsight-resides-in-vnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-059-enforce-cosmosdb-vnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-059-enforce-cosmosdb-vnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-059-enforce-cosmosdb-vnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-067-applicationgateway-enforce-backendhttpssettings",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-067-applicationgateway-enforce-backendhttpssettings",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-067-applicationgateway-enforce-backendhttpssettings')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-068-applicationgateway-enforce-httpslistener",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-068-applicationgateway-enforce-httpslistener",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-068-applicationgateway-enforce-httpslistener')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-080-enforce-subnet-delegation-PaaS",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-080-enforce-subnet-delegation-PaaS",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-080-enforce-subnet-delegation-PaaS')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-084-deny-appservicefunctionapp-http",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-084-deny-appservicefunctionapp-http",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-084-deny-appservicefunctionapp-http')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-085-deny-appservicewebapp-http",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-085-deny-appservicewebapp-http",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-085-deny-appservicewebapp-http')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-092-deny-machinelearning-publicaccesswhenbehindvnet",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-092-deny-machinelearning-publicaccesswhenbehindvnet",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-092-deny-machinelearning-publicaccesswhenbehindvnet')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-093-deny-machinelearning-publicnetworkaccess",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-093-deny-machinelearning-publicnetworkaccess",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-093-deny-machinelearning-publicnetworkaccess')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-094-deny-private-dns-zones",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-094-deny-private-dns-zones",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-094-deny-private-dns-zones')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-096-deny-publicip",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-096-deny-publicip",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-096-deny-publicip')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-097-deny-vnet-peer-cross-sub",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-097-deny-vnet-peer-cross-sub",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-097-deny-vnet-peer-cross-sub')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-098-deny-vnet-peering",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-098-deny-vnet-peering",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-098-deny-vnet-peering')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

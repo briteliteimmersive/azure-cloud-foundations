@@ -1,0 +1,18 @@
+{
+    "name": "84b2eacf-5f73-4cb4-a06e-f1e517cb3661", 
+    "description": "Grants service principals access to run terraform plan for application infrastructure",
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "roleName": " App Infra Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions",
+    "permissions": [
+        {
+            "actions": [
+                "*/read"
+            ],
+            "notActions": [],
+            "dataActions": [],
+            "notDataActions": []
+        }
+    ]
+}

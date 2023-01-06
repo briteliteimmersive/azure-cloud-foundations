@@ -1,0 +1,44 @@
+{
+    "name": "az-028-secure-cache-redis-require-firewall-rules",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-028-secure-cache-redis-require-firewall-rules",
+        "description": "(az-028) : Enforce Redis Cache resources to have firewall rule configurations",
+        "metadata": {
+            "version": "2.0",
+            "category": "Cache"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "AuditIfNotExists",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "equals": "Microsoft.Cache/redis",
+                "field": "type"
+            },
+            "then": {
+                "details": {
+                    "type": "Microsoft.Cache/redis/firewallRules"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

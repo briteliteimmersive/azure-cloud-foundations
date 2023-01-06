@@ -1,0 +1,74 @@
+{
+
+    "name": "az-004-enforce-compute-vm-approved-custom-and-aks-images",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "description": "(az-004): This policy ensures that IaaS Virtual Machines are restricted to defined Custom Images and includes filter condition to support AKS created VMs",
+        "displayName": "az-004-enforce-compute-vm-approved-custom-and-aks-images",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Cognitive Services"
+        },
+        "parameters": {
+            "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+            "allOf": [
+                {
+                "equals": "Microsoft.Compute/virtualMachines",
+                "field": "type"
+                },
+                {
+                "exists": true,
+                "field": "Microsoft.Compute/imageId"
+                },
+                {
+                "not": {
+                    "anyOf": [
+                    {
+                        "allOf": [
+                        {
+                            "contains": "/resourceGroups/MC_",
+                            "field": "id"
+                        },
+                        {
+                            "anyOf": []
+                        }
+                        ]
+                    },
+                    {
+                        "exists": "true",
+                        "field": "tags.databricks-instance-name"
+                    },
+                    {
+                        "exists": "true",
+                        "field": "tags.DatabricksEnvironment"
+                    }
+                    ]
+                }
+                }
+            ]
+            },
+            "then": {
+            "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

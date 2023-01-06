@@ -1,0 +1,59 @@
+{
+    "name": "az-045-secure-storage-sa-blob-prevent-public-access",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-045-secure-storage-sa-blob-prevent-public-access",
+        "description": "(az-045) : Anonymous public read access to containers and blobs in Azure Storage is a convenient way to share data, but might present security risks. To prevent data breaches caused by undesired anonymous access, Microsoft recommends preventing public access to a storage account unless your scenario requires it.",
+        "metadata": {
+            "version": "2.0",
+            "category": "Storage"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Storage/storageAccounts",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "equals": "false",
+                            "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess"
+                        }
+                    },
+                    {
+                        "field": "id",
+                        "notContains": "/resourceGroups/databricks-rg-"
+                    },
+                    {
+                        "field": "id",
+                        "notContains": "/resourceGroups/MC_"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

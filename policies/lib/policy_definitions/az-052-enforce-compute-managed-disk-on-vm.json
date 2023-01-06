@@ -1,0 +1,72 @@
+{
+    "name": "az-052-enforce-compute-managed-disk-on-vm",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-052-enforce-compute-managed-disk-on-vm",
+        "description": "(az-052):Audits use of unmanaged disksenforce-compute-managed-disk-on-vm",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "anyOf": [
+                    {
+                        "allOf": [
+                            {
+                                "equals": "Microsoft.Compute/virtualMachines",
+                                "field": "type"
+                            },
+                            {
+                                "exists": true,
+                                "field": "Microsoft.Compute/virtualMachines/osDisk.uri"
+                            }
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "equals": "Microsoft.Compute/VirtualMachineScaleSets",
+                                "field": "type"
+                            },
+                            {
+                                "anyOf": [
+                                    {
+                                        "exists": true,
+                                        "field": "Microsoft.Compute/VirtualMachineScaleSets/osDisk.vhdContainers"
+                                    },
+                                    {
+                                        "exists": true,
+                                        "field": "Microsoft.Compute/VirtualMachineScaleSets/osdisk.imageUrl"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

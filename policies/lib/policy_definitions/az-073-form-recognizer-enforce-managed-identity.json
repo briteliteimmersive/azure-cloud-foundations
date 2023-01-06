@@ -1,0 +1,61 @@
+{
+    "name": "az-073-form-recognizer-enforce-managed-identity",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-073-form-recognizer-enforce-managed-identity",
+        "description": "(az-073):enfoce use of managed identity for form-recognizer to securely communicate with other azure servicesform-recognizer-enforce-managed-identity",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "FormRecognizer",
+                        "field": "kind"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "exists": "false",
+                                "field": "identity.type"
+                            },
+                            {
+                                "equals": "None",
+                                "field": "identity.type"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "name": "az-053-enforce-datalakestore-encryption",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-053-enforce-datalakestore-encryption",
+        "description": "(az-053):Audits DataLake Store resources for use unencrypted storageenforce-datalakestore-encryption",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "DataLake"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy.  Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.DataLakeStore/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "Disabled",
+                        "field": "Microsoft.DataLakeStore/accounts/encryptionState"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

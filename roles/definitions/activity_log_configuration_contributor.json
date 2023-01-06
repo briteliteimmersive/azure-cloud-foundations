@@ -1,0 +1,23 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role used to configure activity log forwarding on all subscriptions in the tennant.",
+    "name": "7ed78e00-8e31-431e-aa83-fda723c600ee",
+    "permissions": [
+      {
+        "actions": [
+          "*/read",
+          "Microsoft.Insights/LogProfiles/*",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.Insights/Register/Action",
+          "Microsoft.Insights/diagnosticSettings/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Activity Log Configuration Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }
+

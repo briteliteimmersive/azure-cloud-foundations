@@ -1,0 +1,63 @@
+{
+    "name": "az-074-enforce-custom-vision-disable-public-network-access",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-074-enforce-custom-vision-disable-public-network-access",
+        "description": "(az-074):enforce custom vision service to disable public network accessenforce-custom-vision-disable-public-network-access",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "field": "kind",
+                        "like": "CustomVision*"
+                    },
+                    {
+                        "field": "Microsoft.CognitiveServices/accounts/publicNetworkAccess",
+                        "notEquals": "Disabled"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+                            "where": {
+                                "equals": "VirtualNetworks",
+                                "field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+                            }
+                        },
+                        "greater": 0
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

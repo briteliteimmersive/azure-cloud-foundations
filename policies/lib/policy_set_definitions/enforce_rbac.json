@@ -1,0 +1,63 @@
+{
+    "name": "Enforce-rbac",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+      "policyType": "Custom",
+      "displayName": "Enforce-rbac",
+      "description": "Enforce-rbac",
+      "metadata": {},
+      "parameters": {
+        "az-041-secure-servicebus-namespaces-authorizationrules": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-041-secure-servicebus-namespaces-authorizationrules",
+            "description": "(az-041) : Service Bus clients should not use a namespace level access policy that provides access to all queues and topics in a namespace. To align with the least privilege security model, you shoud create access policies at the entity level for queues and topics to provide access to only the specific entity"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Deny"
+        },
+        "az-076-enforce-custom-vision-local-auth-disabled": {
+          "type": "String",
+          "metadata": {
+            "displayName": "az-076-enforce-custom-vision-local-auth-disabled",
+            "description": "enforce custom vision service to disable local authenticationenforce-custom-vision-local-auth-disabled"
+          },
+          "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+          ],
+          "defaultValue": "Audit"
+        }
+      },
+      "policyDefinitions": [
+        {
+          "policyDefinitionReferenceId": "az-041-secure-servicebus-namespaces-authorizationrules",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-041-secure-servicebus-namespaces-authorizationrules",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-041-secure-servicebus-namespaces-authorizationrules')]"
+            }
+          },
+          "groupNames": []
+        },
+        {
+          "policyDefinitionReferenceId": "az-076-enforce-custom-vision-local-auth-disabled",
+          "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-076-enforce-custom-vision-local-auth-disabled",
+          "parameters": {
+            "effect": {
+              "value": "[parameters('az-076-enforce-custom-vision-local-auth-disabled')]"
+            }
+          },
+          "groupNames": []
+        }
+      ],
+      "policyDefinitionGroups": null
+    }
+  }

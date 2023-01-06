@@ -1,0 +1,57 @@
+{
+    "name": "az-020-monitor-sql-server-auditing",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "displayName": "az-020-monitor-sql-server-auditing",
+        "description": "(az-020) Policy monitors Azure SQL auditing for SQL Server resources",
+        "metadata": {
+            "version": "2.0.0",
+            "category": "SQL"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "AuditIfNotExists",
+                    "Disabled"
+                ],
+                "defaultValue": "AuditIfNotExists",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Sql/servers",
+                        "field": "type"
+                    },
+                    {
+                        "field": "kind",
+                        "notContains": "analytics"
+                    }
+                ]
+            },
+            "then": {
+                "details": {
+                    "existenceCondition": {
+                        "equals": "enabled",
+                        "field": "Microsoft.Sql/auditingSettings.state"
+                    },
+                    "name": "default",
+                    "type": "Microsoft.Sql/servers/auditingSettings"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

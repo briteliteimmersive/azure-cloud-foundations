@@ -1,0 +1,53 @@
+{
+    "name": "az-062-enforce-azure-monitoring-diagnostics-agent-on-vm",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-062-enforce-azure-monitoring-diagnostics-agent-on-vm",
+        "description": "(az-062):Audits Virtual Machines for the Azure Diagnostics Agentenforce-azure-monitoring-diagnostics-agent-on-vm",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Deny",
+                    "Disabled"
+                  ],
+                "defaultValue": "Deny",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Compute/virtualMachines",
+                        "field": "type"
+                    }
+                ]
+            },
+            "then": {
+                "details": {
+                    "existenceCondition": {
+                        "field": "Microsoft.Compute/virtualMachines/extensions/type",
+                        "in": [
+                            "IaaSDiagnostics",
+                            "LinuxDiagnostic"
+                        ]
+                    },
+                    "type": "Microsoft.Compute/virtualMachines/extensions"
+                },
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

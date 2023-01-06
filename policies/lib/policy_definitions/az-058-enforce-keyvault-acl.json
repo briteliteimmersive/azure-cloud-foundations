@@ -1,0 +1,48 @@
+{
+    "name": "az-058-enforce-keyvault-acl",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-058-enforce-keyvault-acl",
+        "description": "(az-058):Audits KeyVault ACLs that don't have a default Deny actionenforce-keyvault-acl",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "KeyVault"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy.  Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.keyVault/vaults",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "allow",
+                        "field": "Microsoft.KeyVault/vaults/networkAcls.defaultAction"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,16 @@
+name: policies
+
+on:
+ push:
+    branches:
+      - 'main'
+    paths:
+      - 'policies/**'
+
+jobs:
+
+  module-release:
+    uses: briteliteimmersive/devops-automation-enablers/.github/workflows/tf-module-release.yml@main
+    with:
+      tf-module-name: '${{ github.workflow }}'
+    secrets: inherit

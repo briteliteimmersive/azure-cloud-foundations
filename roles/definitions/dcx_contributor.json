@@ -1,0 +1,47 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role created as part of exception to allow near contributor access, excluding a few security sensitive network actions.",
+    "name": "c29e2e8c-0161-460e-9f7d-6896450b2b64",
+    "permissions": [
+      {
+        "actions": [
+          "*"
+        ],
+        "dataActions": [],
+        "notActions": [
+          "Microsoft.Network/virtualNetworks/delete",
+          "Microsoft.Network/virtualNetworks/write",
+          "Microsoft.Network/virtualNetworks/peer/action",
+          "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/write",
+          "Microsoft.Network/virtualNetworks/virtualNetworkPeerings/delete",
+          "Microsoft.Network/routeTables/write",
+          "Microsoft.Network/routeTables/delete",
+          "Microsoft.Network/routeTables/routes/delete",
+          "Microsoft.Network/virtualNetworkGateways/write",
+          "Microsoft.Network/virtualNetworkGateways/delete",
+          "Microsoft.network/virtualnetworkgateways/generatevpnclientpackage/action",
+          "Microsoft.network/virtualnetworkgateways/generatevpnprofile/action",
+          "Microsoft.network/virtualnetworkgateways/getvpnclientconnectionhealth/action",
+          "Microsoft.network/virtualnetworkgateways/getvpnprofilepackageurl/action",
+          "Microsoft.Network/virtualnetworkgateways/supportedvpndevices/action",
+          "Microsoft.network/virtualnetworkgateways/setvpnclientipsecparameters/action",
+          "Microsoft.network/virtualnetworkgateways/getvpnclientipsecparameters/action",
+          "Microsoft.network/virtualnetworkgateways/resetvpnclientsharedkey/action",
+          "Microsoft.network/virtualnetworkgateways/reset/action",
+          "Microsoft.network/virtualnetworkgateways/getadvertisedroutes/action",
+          "Microsoft.network/virtualnetworkgateways/getbgppeerstatus/action",
+          "Microsoft.network/virtualnetworkgateways/getlearnedroutes/action",
+          "Microsoft.Network/localnetworkgateways/write",
+          "Microsoft.Network/localnetworkgateways/delete",
+          "Microsoft.Network/expressRouteCircuits/*",
+          "Microsoft.Authorization/*/Delete",
+          "Microsoft.Authorization/*/Write",
+          "Microsoft.Authorization/elevateAccess/Action"
+        ],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "DCX Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

@@ -1,0 +1,53 @@
+{
+    "name": "az-005-enforce-compute-vmss-approved-custom-and-aks-images",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-005-enforce-compute-vmss-approved-custom-and-aks-images",
+        "description": "(az-005): This policy ensures that IaaS Virtual Machine ScaleSets are restricted to defined Custom Images and includes filter condition to support AKS created VMs",
+        "metadata": {
+        "version": "1.0.0",
+        "category": "Compute"
+        },
+        "parameters": {
+        "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+            "Audit",
+            "Deny",
+            "Disabled"
+            ],
+            "metadata": {
+            "displayName": "Effect",
+            "description": "Enable or disable the execution of the policy"
+            }
+        }
+        },
+        "policyRule": {
+        "if": {
+            "allOf": [
+            {
+                "equals": "Microsoft.Compute/virtualMachineScaleSets",
+                "field": "type"
+            },
+            {
+                "exists": true,
+                "field": "Microsoft.Compute/imageId"
+            },
+            {
+                "not": {
+                "anyOf": []
+                }
+            }
+            ]
+        },
+        "then": {
+            "effect": "[parameters('effect')]"
+        }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role created for to allow locking and unlocking resources in Azure.",
+    "name": "912a264b-92e7-46e5-aa20-c01289468f94",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/locks/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Resource Lock Contributor",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+}

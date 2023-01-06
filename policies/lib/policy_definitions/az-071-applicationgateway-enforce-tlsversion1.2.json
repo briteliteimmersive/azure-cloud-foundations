@@ -1,0 +1,49 @@
+{
+    "name": "az-071-applicationgateway-enforce-tlsversion1.2",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-071-applicationgateway-enforce-tlsversion1.2",
+        "description": "(az-071):enfoce use of Transport Layer Security version 1.2 in app-gateway network communicaitonsapplicationgateway-enforce-tlsversion1.2",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sslPolicy.policyName",
+                        "notEquals": "AppGwSslPolicy20170401S"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sslPolicy.minProtocolVersion",
+                        "notEquals": "TLSv1_2"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

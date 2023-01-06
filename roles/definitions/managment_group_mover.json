@@ -1,0 +1,23 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role used to move subscriptions between management groups.",
+    "name": "2df430fd-a1a3-4436-922d-7039202011eb",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Management/register/action",
+          "Microsoft.Management/managementGroups/read",
+          "Microsoft.Management/managementGroups/write",
+          "Microsoft.Management/managementGroups/subscriptions/write",
+          "Microsoft.Authorization/roleAssignments/delete",
+          "Microsoft.Authorization/roleAssignments/write"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Management Group Mover",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

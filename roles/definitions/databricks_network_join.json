@@ -1,0 +1,24 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role created to allow netork join operations on a vnet.  Created to solve specific issue with databricks.",
+    "name": "f7b01020-1003-4750-92fd-a531e9690839",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Network/virtualNetworks/read",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Resources/deployments/validate/action",
+          "Microsoft.Resources/deployments/write",
+          "Microsoft.Resources/deployments/read",
+          "Microsoft.Network/virtualNetworks/subnets/join/action",
+          "Microsoft.Network/virtualNetworks/subnets/read"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Databricks Network Join",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

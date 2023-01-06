@@ -1,0 +1,49 @@
+{
+    "name": "az-026-secure-app-service-web-sites-require-https",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "displayName": "az-026-secure-app-service-web-sites-require-https",
+        "description": "(az-026) : Requires AppService (Microsoft.Web/sites) to use HTTPS Only",
+        "metadata": {
+            "version": "2.0",
+            "category": "AppService"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Web/sites",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "false",
+                        "field": "Microsoft.Web/sites/httpsOnly"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

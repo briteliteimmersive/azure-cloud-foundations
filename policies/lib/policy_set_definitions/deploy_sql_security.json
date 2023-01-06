@@ -1,0 +1,88 @@
+{
+  "name": "Deploy-Sql-Security",
+  "type": "Microsoft.Authorization/policySetDefinitions",
+  "apiVersion": "2021-06-01",
+  "scope": null,
+  "properties": {
+    "policyType": "Custom",
+    "displayName": "Deploy SQL Database built-in SQL security configuration",
+    "description": "Deploy auditing, Alert, TDE and SQL vulnerability to SQL Databases when it not exist in the deployment",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "SQL"
+    },
+    "parameters": {
+      "az-020-monitor-sql-server-auditing": {
+        "metadata": {
+          "description": "The email address to send alerts",
+          "displayName": "az-020-monitor-sql-server-auditing"
+        },
+        "type": "String",
+        "allowedValues": [
+          "Audit",
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "AuditIfNotExists"
+      },
+      "az-081-enforce-sql-server-threatprotection": {
+        "metadata": {
+          "description": "az-081-enforce-sql-server-threatprotections",
+          "displayName": "az-081-enforce-sql-server-threatprotection"
+        },
+        "type": "String",
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit"
+      },
+      "az-042-secure-sql-servers-databases-require-tde": {
+        "metadata": {
+          "description": "az-042-secure-sql-servers-databases-require-tde",
+          "displayName": "az-042-secure-sql-servers-databases-require-tde"
+        },
+        "type": "String",
+        "allowedValues": [          
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "AuditIfNotExists"
+      }
+    },
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "az-020-monitor-sql-server-auditing",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-020-monitor-sql-server-auditing",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-020-monitor-sql-server-auditing')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-081-enforce-sql-server-threatprotection",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-081-enforce-sql-server-threatprotection",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-081-enforce-sql-server-threatprotection')]"
+          }
+        },
+        "groupNames": []
+      },
+      {
+        "policyDefinitionReferenceId": "az-042-secure-sql-servers-databases-require-tde",
+        "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-042-secure-sql-servers-databases-require-tde",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('az-042-secure-sql-servers-databases-require-tde')]"
+          }
+        },
+        "groupNames": []
+      }
+    ],
+    "policyDefinitionGroups": null
+  }
+}

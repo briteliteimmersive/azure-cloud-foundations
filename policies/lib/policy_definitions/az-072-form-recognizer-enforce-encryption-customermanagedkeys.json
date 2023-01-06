@@ -1,0 +1,63 @@
+{
+    "name": "az-072-form-recognizer-enforce-encryption-customermanagedkeys",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-072-form-recognizer-enforce-encryption-customermanagedkeys",
+        "description": "(az-072):enfoce encryption of data at rest using a customer managed keyform-recognizer-enforce-encryption-customermanagedkeys",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.CognitiveServices/accounts",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "FormRecognizer",
+                        "field": "kind"
+                    },
+                    {
+                        "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
+                        "notEquals": "Microsoft.KeyVault"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.CognitiveServices/accounts/capabilities[*]",
+                            "where": {
+                                "equals": "CustomerManagedKey",
+                                "field": "Microsoft.CognitiveServices/accounts/capabilities[*].name"
+                            }
+                        },
+                        "greater": 0
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

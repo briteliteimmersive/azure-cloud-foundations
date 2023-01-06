@@ -1,0 +1,178 @@
+{
+    "name": "enforce-compute-standards",
+    "type": "Microsoft.Authorization/policySetDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "displayName": "enforce-compute-standards",
+        "description": "This policy initiative is a group of policies that enforeces compute standards ",
+        "metadata": {},
+        "parameters": {            
+            "az-033-secure-network-nic-restrict-public-ips": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-033-secure-network-nic-restrict-public-ips",
+                "description": "Audits Network Interfaces with associated Public IP addresses"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Audit"
+            },
+            "az-052-enforce-compute-managed-disk-on-vm": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-052-enforce-compute-managed-disk-on-vm",
+                "description": "Audits use of unmanaged disksenforce-compute-managed-disk-on-vm"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Audit"
+            },            
+            "az-087-deny-machinelearning-compute-subnetid": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-161-Enforce-subnet-connectivity-Azure-Machine-Learning-compute-clusters-and-compute-instances",
+                "description": "Enforce subnet connectivity for Azure Machine Learning compute clusters and compute instances "
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Deny"
+            },
+            "az-088-deny-machinelearning-compute-vmsize": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-088-deny-machinelearning-compute-vmsize",
+                "description": "Limit allowed vm sizes for Azure Machine Learning compute clusters and compute instances. "
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Deny"
+            },
+            "az-089-deny-machinelearning-compute-remotelogin-pa": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-089-deny-machinelearning-compute-remotelogin-pa",
+                "description": "Deny public access of Azure Machine Learning clusters via SSH"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Deny"
+            },
+            "az-090-deny-machinelearning-computecluster-scale": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-090-deny-machinelearning-computecluster-scale",
+                "description": "This policy denies creation of MySql Flexible Server DB accounts with exposed public endpoints"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Deny"
+            },
+            "az-091-deny-machinelearning-hbiworkspace": {
+            "type": "String",
+            "metadata": {
+                "displayName": "az-091-deny-machinelearning-hbiworkspace",
+                "description": "Enforces high business impact Azure Machine Learning workspaces"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Deny"
+            }
+        },
+        "policyDefinitions": [            
+            {
+            "policyDefinitionReferenceId": "az-033-secure-network-nic-restrict-public-ips",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-033-secure-network-nic-restrict-public-ips",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-033-secure-network-nic-restrict-public-ips')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-052-enforce-compute-managed-disk-on-vm",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-052-enforce-compute-managed-disk-on-vm",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-052-enforce-compute-managed-disk-on-vm')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-087-deny-machinelearning-compute-subnetid",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-087-deny-machinelearning-compute-subnetid",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-087-deny-machinelearning-compute-subnetid')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-088-deny-machinelearning-compute-vmsize",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-088-deny-machinelearning-compute-vmsize",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-088-deny-machinelearning-compute-vmsize')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-089-deny-machinelearning-compute-remotelogin-pa",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-089-deny-machinelearning-compute-remotelogin-pa",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-089-deny-machinelearning-compute-remotelogin-pa')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-090-deny-machinelearning-computecluster-scale",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-090-deny-machinelearning-computecluster-scale",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-090-deny-machinelearning-computecluster-scale')]"
+                }
+            },
+            "groupNames": []
+            },
+            {
+            "policyDefinitionReferenceId": "az-091-deny-machinelearning-hbiworkspace",
+            "policyDefinitionId": "${root_scope_resource_id}/providers/Microsoft.Authorization/policyDefinitions/az-091-deny-machinelearning-hbiworkspace",
+            "parameters": {
+                "effect": {
+                "value": "[parameters('az-091-deny-machinelearning-hbiworkspace')]"
+                }
+            },
+            "groupNames": []
+            }
+        ],
+        "policyDefinitionGroups": null
+    }
+}

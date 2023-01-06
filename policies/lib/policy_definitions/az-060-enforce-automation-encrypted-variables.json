@@ -1,0 +1,48 @@
+{
+    "name": "az-060-enforce-automation-encrypted-variables",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-060-enforce-automation-encrypted-variables",
+        "description": "(az-060):Audits Azure Automation resources with unencrypted variablesenforce-automation-encrypted-variables",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Automation"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Automation/automationAccounts/variables",
+                        "field": "type"
+                    },
+                    {
+                        "equals": false,
+                        "field": "Microsoft.Automation/automationAccounts/variables/isEncrypted"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

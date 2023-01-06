@@ -1,0 +1,55 @@
+{
+    "name": "az-032-enforce-key-vault-vaults-prevent-pna",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "displayName": "az-032-enforce-key-vault-vaults-prevent-pna",
+        "description": "(az-032) : KeyVault ACLs must have Default Action set to Deny. This disables public network access to the key vault so that it's not accessible over the public internet. This can reduce data leakage risks. Learn more at: https://aka.ms/akvprivatelink.",
+        "metadata": {
+            "version": "2.0",
+            "category": "KeyVault"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.KeyVault/vaults",
+                        "field": "type"
+                    },
+                    {
+                        "not": {
+                            "equals": "recover",
+                            "field": "Microsoft.KeyVault/vaults/createMode"
+                        }
+                    },
+                    {
+                        "field": "Microsoft.KeyVault/vaults/networkAcls.defaultAction",
+                        "notEquals": "Deny"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

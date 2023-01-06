@@ -1,0 +1,52 @@
+{
+    "name": "az-068-applicationgateway-enforce-httpslistener",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-068-applicationgateway-enforce-httpslistener",
+        "description": "(az-068):enfoce use of HTTPS in app-gateway's listener settingsapplicationgateway-enforce-HttpsListener",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Compute"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "description": "The effect for this policy. Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/applicationGateways",
+                        "field": "type"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Network/applicationGateways/httpListeners[*].protocol",
+                                "notEquals": "Https"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

@@ -1,0 +1,95 @@
+{
+    "name": "az-038-secure-network-vnet-subnets-require-service-endpoints",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-038-secure-network-vnet-subnets-require-service-endpoints",
+        "description": "(az-038) : Policy enforces the requirement that all subnet service endpoints are enabled when subnet is created or modified",
+        "metadata": {
+            "version": "2.0",
+            "category": "Network"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Deny",
+                "metadata": {
+
+                    "description": "Enable or disable the execution of the policy",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            },
+            "serviceEndpoints": {
+                "allowedValues": [
+                    "Microsoft.AzureActiveDirectory",
+                    "Microsoft.AzureCosmosDB",
+                    "Microsoft.CognitiveServices",
+                    "Microsoft.ContainerRegistry",
+                    "Microsoft.EventHub",
+                    "Microsoft.KeyVault",
+                    "Microsoft.ServiceBus",
+                    "Microsoft.Sql",
+                    "Microsoft.Storage",
+                    "Microsoft.Web"
+                ],
+                "defaultValue": [
+                    "Microsoft.AzureActiveDirectory",
+                    "Microsoft.AzureCosmosDB",
+                    "Microsoft.EventHub",
+                    "Microsoft.KeyVault",
+                    "Microsoft.ServiceBus",
+                    "Microsoft.Sql",
+                    "Microsoft.Storage",
+                    "Microsoft.Web"
+                ],
+                "metadata": {
+
+                    "description": "Minimum Required ServiceEndpoints for Subnets",
+                    "displayName": "ServiceEndpoints for Subnets"
+                },
+                "type": "Array"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.Network/virtualNetworks/subnets",
+                        "field": "type"
+                    },
+                    {
+                        "count": {
+                            "name": "serviceEndpoint",
+                            "value": "[parameters('serviceEndpoints')]",
+                            "where": {
+                                "notIn": "[field('Microsoft.Network/virtualNetworks/subnets/serviceEndpoints[*].service')]",
+                                "value": "[current('serviceEndpoint')]"
+                            }
+                        },
+                        "greater": 0
+                    },
+                    {
+                        "field": "name",
+                        "notIn": [
+                            "AzureBastionSubnet",
+                            "GatewaySubnet",
+                            "AzureFirewallSubnet",
+                            "AzureFirewallManagementSubnet"
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

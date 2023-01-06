@@ -1,0 +1,18 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": "Custom role for for use by a Dynamic SPN.",
+    "name": "ce7035de-6d5b-4813-99f2-9b78cf9a8a7d",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/roleAssignments/*"
+        ],
+        "dataActions": [],
+        "notActions": [],
+        "notDataActions": []
+      }
+    ],
+    "roleName": "Role Assignment Write",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }

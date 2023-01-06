@@ -1,0 +1,62 @@
+{
+
+    "name": "az-006-enforce-databricks-workspaces-require-delegated-subnet",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "description": "(az-006): Deny Databricks workspaces without Vnet injection; Enforces the use of vnet injection for Databricks workspaces. Azure Databricks resources should be delegated to a subnet",
+        "displayName": "az-006-enforce-databricks-workspaces-require-delegated-subnet",
+
+        "metadata": {
+            "version": "1.0.0",
+            "category": "DataBricks"
+        },
+        "parameters": {
+            "effect": {
+            "type": "String",
+            "defaultValue": "Deny",
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+            }
+            }
+        },
+        "policyRule": {
+            "if": {
+            "allOf": [
+                {
+                "equals": "Microsoft.Databricks/workspaces",
+                "field": "type"
+                },
+                {
+                "anyOf": [
+                    {
+                    "exists": false,
+                    "field": "Microsoft.DataBricks/workspaces/parameters.customVirtualNetworkId.value"
+                    },
+                    {
+                    "exists": false,
+                    "field": "Microsoft.DataBricks/workspaces/parameters.customPublicSubnetName.value"
+                    },
+                    {
+                    "exists": false,
+                    "field": "Microsoft.DataBricks/workspaces/parameters.customPrivateSubnetName.value"
+                    }
+                ]
+                }
+            ]
+            },
+            "then": {
+            "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

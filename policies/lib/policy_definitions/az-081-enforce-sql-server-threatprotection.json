@@ -1,0 +1,49 @@
+{
+    "name": "az-081-enforce-sql-server-threatprotection",
+    "type": "Microsoft.Authorization/policyDefinitions",
+    "apiVersion": "2021-06-01",
+    "scope": null,
+    "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "displayName": "az-081-enforce-sql-server-threatprotection",
+        "description": "(az-081):enforce-sql-server-threatprotection",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Database"
+        },
+        "parameters": {
+            "effect": {
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+
+                    "description": "The effect for this policy.  Audit or Deny",
+                    "displayName": "Effect"
+                },
+                "type": "String"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "equals": "Microsoft.SQL/servers/securityAlertPolicies",
+                        "field": "type"
+                    },
+                    {
+                        "equals": "Disabled",
+                        "field": "Microsoft.Sql/servers/securityAlertPolicies/state"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

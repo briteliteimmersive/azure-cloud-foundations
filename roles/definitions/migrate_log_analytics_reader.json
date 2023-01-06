@@ -1,0 +1,27 @@
+{
+    "assignableScopes": ["${current_scope_resource_id}"],
+    "description": " Custom Role for the reading of Log Analytics workspaces",
+    "name": "0c6952cb-8247-46ce-a1dd-7f517c2d43eb",
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.OperationalInsights/workspaces/analytics/query/action",
+          "Microsoft.OperationalInsights/workspaces/analytics/query/*/read",
+          "Microsoft.OperationalInsights/workspaces/read",
+          "Microsoft.OperationalInsights/workspaces/*/read",
+          "Microsoft.OperationalInsights/workspaces/*/savedSearches/read",
+          "Microsoft.OperationalInsights/workspaces/*/savedSearches/write",
+          "Microsoft.OperationalInsights/workspaces/search/action",
+          "Microsoft.OperationsManagement/*/read"
+        ],
+        "dataActions": [],
+        "notActions": [
+          "Microsoft.OperationalInsights/workspaces/sharedKeys/read"
+        ],
+        "notDataActions": []
+      }
+    ],
+    "roleName": " Migrate Log Analytics Reader",
+    "roleType": "CustomRole",
+    "type": "Microsoft.Authorization/roleDefinitions"
+  }
