@@ -6,11 +6,11 @@ variable "subscription_spns" {
       role_definition_id = optional(string)
       gh_environment = optional(object(
         {
-          name = string
+          name           = string
           repo_full_name = string
         }
       ))
-      tags               = optional(list(string), [])
+      tags = optional(list(string), [])
     }
   ))
 
@@ -31,7 +31,7 @@ locals {
         local.subscription_id,
         spn.role_definition_id
       ) : null
-      tags = concat(["created-by-terraform"], spn.tags)
+      tags           = concat(["created-by-terraform"], spn.tags)
       gh_environment = spn.gh_environment
     }
   }
