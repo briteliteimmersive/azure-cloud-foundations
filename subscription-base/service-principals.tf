@@ -4,6 +4,12 @@ variable "subscription_spns" {
     {
       name               = string
       role_definition_id = optional(string)
+      gh_environment = optional(object(
+        {
+          name = string
+          repo_full_name = string
+        }
+      ))
       tags               = optional(list(string), [])
     }
   ))
@@ -26,6 +32,7 @@ locals {
         spn.role_definition_id
       ) : null
       tags = concat(["created-by-terraform"], spn.tags)
+      gh_environment = spn.gh_environment
     }
   }
 
@@ -80,4 +87,19 @@ resource "azurerm_key_vault_secret" "spn_client_secrets" {
   depends_on = [
     azurerm_role_assignment.sub_spn_assignment
   ]
+}
+
+data "azuread_application_published_app_ids" "well_known" {}
+
+resource "azuread_service_principal" "msgraph" {
+  application_id = data.azuread_application_published_app_ids.well_known.result.MicrosoftGraph
+  use_existing   = true
+}
+
+resource "azuread_app_role_assignment" "app_azuread_role_assignment" {
+  provider            = azuread.azuread_spn
+  for_each            = local.sub_spns
+  app_role_id         = azuread_service_principal.msgraph.app_role_ids["Application.Read.All"]
+  principal_object_id = azuread_service_principal.sub_app_spn[each.key].object_id
+  resource_object_id  = azuread_service_principal.msgraph.object_id
 }
