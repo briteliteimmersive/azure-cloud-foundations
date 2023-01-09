@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 2.27.0"
     }
+    github = {
+      source  = "integrations/github"
+      version = "~> 5.0"
+    }
   }
 }
 
