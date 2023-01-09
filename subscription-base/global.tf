@@ -50,15 +50,8 @@ variable "global_configs" {
 }
 
 variable "deployment_info" {
-  type = object(
-    {
-      deployed_by = string
-    }
-  )
-
-  default = {
-    deployed_by = "{“version”: “”, “commit-id”: “”, “pipeline-name”:””, “github-repo”: “”}"
-  }
+  type    = string
+  default = "{“version”: “”, “commit-id”: “”, “pipeline-name”:””, “github-repo”: “”}"
 }
 
 ## Run-time data inputs
@@ -80,7 +73,7 @@ locals {
   environment     = var.global_configs.mandatory_tags.environment
   common_resource_tags = merge(
     var.global_configs.mandatory_tags, {
-      deployed-by = var.deployment_info.deployed_by
+      deployed-by = var.deployment_info
     }
   )
 
