@@ -3,7 +3,8 @@ locals {
     for storage_config in local.admin_storage : lower(format("%s/%s", local.resource_groups.admin_rg.name, storage_config.name)) => merge(storage_config, {
       storage_key = lower(format("%s/%s", local.resource_groups.admin_rg.name, storage_config.name))
       network_rules = {
-        default_action = "Deny"
+        ## Cannot be set to deny unless deployment agent information is passed in.
+        default_action = length(local.deployment_agent_subnet_id) > 0 ? "Deny" : "Allow"
         bypass         = ["Logging", "Metrics", "AzureServices"]
         ip_rules = distinct(concat(
           #   [for ip_range in var.org_public_ip_ranges : replace(replace(ip_range, "/32", ""), "/31", "")],

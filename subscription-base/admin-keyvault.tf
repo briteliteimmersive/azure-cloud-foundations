@@ -6,8 +6,9 @@ locals {
       name         = local.admin_keyvault.name
       sku_name     = local.admin_keyvault.sku_name
       network_acls = {
-        bypass         = "AzureServices"
-        default_action = "Deny"
+        bypass = "AzureServices"
+        ## Cannot be set to deny unless deployment agent information is passed in.
+        default_action = length(local.deployment_agent_subnet_id) > 0 ? "Deny" : "Allow"
         ip_rules = distinct(concat(
           # var.org_public_ip_ranges, 
           local.admin_network_rules.public_ip_ranges

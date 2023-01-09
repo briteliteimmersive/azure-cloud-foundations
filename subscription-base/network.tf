@@ -11,9 +11,19 @@ variable "network_configs" {
           dns_servers   = optional(list(string))
           subnets = optional(list(object(
             {
-              name                                          = string
-              address_prefix                                = string
-              service_endpoints                             = optional(list(string))
+              name           = string
+              address_prefix = string
+              service_endpoints = optional(list(string), [
+                "Microsoft.KeyVault",
+                "Microsoft.ServiceBus",
+                "Microsoft.Sql",
+                "Microsoft.Storage",
+                "Microsoft.AzureActiveDirectory",
+                "Microsoft.AzureCosmosDB",
+                "Microsoft.ContainerRegistry",
+                "Microsoft.EventHub",
+                "Microsoft.Web"
+              ])
               private_endpoint_network_policies_enabled     = optional(bool)
               private_link_service_network_policies_enabled = optional(bool)
               associated_nsg_name                           = string
