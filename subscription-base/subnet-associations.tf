@@ -1,11 +1,12 @@
 locals {
   route_table_associations = {
     for subnet in local.subnets :
-    format("%s-rte-%d", subnet.subnet_key, subnet.route_table_serial_no) => {
+    lower(format("%s/%s", subnet.subnet_key, subnet.associated_route_table_name)) => {
       subnet_key      = subnet.subnet_key
-      route_table_key = format("rte-%d", subnet.route_table_serial_no)
+      association_key = lower(format("%s/%s", subnet.subnet_key, subnet.associated_route_table_name))
+      route_table_key = local.route_table_keys_by_name[subnet.associated_route_table_name]
     }
-    if subnet.route_table_serial_no != -100
+    if subnet.associated_route_table_name != null
   }
 }
 
@@ -18,11 +19,12 @@ resource "azurerm_subnet_route_table_association" "subnet_udr_association" {
 locals {
   nsg_associations = {
     for subnet in local.subnets :
-    format("%s-nsg-%d", subnet.subnet_key, subnet.nsg_serial_no) => {
-      subnet_key = subnet.subnet_key
-      nsg_key    = format("nsg-%d", subnet.nsg_serial_no)
+    lower(format("%s/%s", subnet.subnet_key, subnet.associated_nsg_name)) => {
+      subnet_key      = subnet.subnet_key
+      association_key = lower(format("%s/%s", subnet.subnet_key, subnet.associated_nsg_name))
+      nsg_key         = local.nsg_keys_by_name[subnet.associated_nsg_name]
     }
-    if subnet.nsg_serial_no != -100
+    if subnet.associated_nsg_name != null
   }
 }
 

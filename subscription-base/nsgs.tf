@@ -1,10 +1,7 @@
 ## Input variables
 variable "nsg_configs" {
   type = list(object({
-    serial_no       = number
-    name            = optional(string)
-    environment     = optional(string)
-    app_unique_code = optional(string)
+    name = string
     rules = optional(list(object({
       name                         = string
       priority                     = number
@@ -21,55 +18,22 @@ variable "nsg_configs" {
       source_port_ranges           = optional(list(string))
     })))
   }))
-  default = []
+
 }
 
 ## Create NSGs
 locals {
 
-  ## Example = "OZI-GX-NP-SUB013-WE-NSG-COPS-N001" 
-  nsg_naming_format = "%s-%s-nsg-%s-%s%03d"
-
   nsgs = {
     for nsg in var.nsg_configs :
-    lower(format("nsg-%d", nsg.serial_no)) => merge(nsg, {
-      resource_key = lower(format("nsg-%d", nsg.serial_no))
-      name = lower(coalesce(nsg.name, format(
-        local.nsg_naming_format,
-        local.subscription_name,
-        local.az_location_code,
-        coalesce(nsg.app_unique_code, local.app_unique_code),
-        try(lookup(local.env_code_map, nsg.environment), local.infra_env_code),
-        nsg.serial_no
-      )))
+    lower(format("%s/%s", local.resource_groups.network_rg.name, nsg.name)) => merge(nsg, {
+      nsg_key = lower(format("%s/%s", local.resource_groups.network_rg.name, nsg.name))
     })
   }
 
-  #   nsg_list = flatten([
-  #     for vnet_key, vnet in local.virtual_networks : [
-  #       for nsg in coalesce(vnet.network_security_groups, []) : merge(nsg, {
-  #         vnet_key = vnet_key
-  #         nsg_key = lower(format(
-  #           "%s-nsg-%s%d",
-  #           vnet_key,
-  #           try(lookup(local.env_code_map, nsg.nsg_environment), local.infra_env_code),
-  #           nsg.nsg_serial_no
-  #         ))
-  #         name = lower(coalesce(nsg.nsg_name, format(
-  #           local.nsg_naming_format,
-  #           local.subscription_name,
-  #           local.az_location_code,
-  #           coalesce(nsg.nsg_app_unique_code, local.app_unique_code),
-  #           try(lookup(local.env_code_map, nsg.nsg_environment), local.infra_env_code),
-  #           nsg.nsg_serial_no
-  #         )))
-  #       })
-  #     ]
-  #   ])
-
-  #   nsgs = {
-  #     for nsg in local.nsg_list : nsg.nsg_key => nsg
-  #   }
+  nsg_keys_by_name = {
+    for nsg_key, nsg in local.nsgs : nsg.name => nsg_key
+  }
 
 }
 
@@ -88,7 +52,7 @@ locals {
         for rule in coalesce(nsg.rules, []) : merge(rule,
           {
             nsg_key      = nsg_key
-            nsg_rule_key = "${nsg_key}-${rule.name}"
+            nsg_rule_key = format("%s/%s", nsg_key, rule.name)
           }
         )
       ]
