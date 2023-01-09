@@ -5,15 +5,8 @@ variable "gh_token" {
   default   = null
 }
 
-variable "gh_base_url" {
-  type      = string
-  sensitive = true
-  default   = "https://github.com/"
-}
-
 provider "github" {
   token    = var.gh_token
-  base_url = var.gh_base_url
 }
 
 ## Run-Time variables
@@ -24,7 +17,7 @@ locals {
   }
 
   gh_repos = toset([
-    for spn in local.gh_environments : spn.repo_full_name
+    for spn in local.gh_environments : spn.gh_environment.repo_full_name
   ])
 
 }
