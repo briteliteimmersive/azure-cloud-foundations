@@ -6,8 +6,8 @@ variable "subscription_spns" {
       role_definition_id = optional(string)
       gh_environment = optional(object(
         {
-          name           = string
-          repo_full_name = string
+          name      = string
+          repo_name = string
         }
       ))
       tags = optional(list(string), [])
@@ -75,7 +75,7 @@ resource "azurerm_key_vault_secret" "spn_client_ids" {
   value        = azuread_service_principal.sub_app_spn[each.key].application_id
   key_vault_id = azurerm_key_vault.admin_keyvault[each.value.keyvault_key].id
   depends_on = [
-    azurerm_role_assignment.sub_spn_assignment
+    time_sleep.role_assignment_propagation
   ]
 }
 
@@ -85,7 +85,7 @@ resource "azurerm_key_vault_secret" "spn_client_secrets" {
   value        = azuread_service_principal_password.sub_app_spn_credentials[each.key].value
   key_vault_id = azurerm_key_vault.admin_keyvault[each.value.keyvault_key].id
   depends_on = [
-    azurerm_role_assignment.sub_spn_assignment
+    time_sleep.role_assignment_propagation
   ]
 }
 

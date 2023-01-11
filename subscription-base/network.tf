@@ -26,8 +26,8 @@ variable "network_configs" {
               ])
               private_endpoint_network_policies_enabled     = optional(bool)
               private_link_service_network_policies_enabled = optional(bool)
-              associated_nsg_name                           = string
-              associated_route_table_name                   = string
+              associated_nsg_name                           = optional(string)
+              associated_route_table_name                   = optional(string)
               delegation = optional(list(object({
                 service_delegation = object({
                   name    = string

@@ -52,3 +52,12 @@ resource "azurerm_role_assignment" "kv_admin_role_assignment" {
   role_definition_id = format("/subscriptions/%s%s", local.subscription_id, data.azurerm_role_definition.kv_admin_builtin_role.id)
   principal_id       = local.client_object_id
 }
+
+resource "time_sleep" "role_assignment_propagation" {
+  for_each        = local.keyvault_config
+  create_duration = "15s"
+
+  triggers = {
+    role_assignment_id = azurerm_role_assignment.kv_admin_role_assignment[each.key].id
+  }
+}

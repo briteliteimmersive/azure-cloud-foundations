@@ -29,3 +29,9 @@ provider "azurerm" {
   subscription_id = local.regional_hub_subscription_id
   features {}
 }
+
+provider "github" {
+  base_url = var.gh_base_url
+  owner    = var.gh_org_name
+  token    = var.gh_token
+}
