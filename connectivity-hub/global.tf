@@ -2,7 +2,7 @@
 variable "global_configs" {
   type = object(
     {
-      location        = string
+      location = string
       mandatory_tags = object(
         {
           app-id        = string
