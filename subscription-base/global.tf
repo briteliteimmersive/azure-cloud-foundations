@@ -56,6 +56,7 @@ variable "deployment_info" {
 
 ## Run-time data inputs
 data "azurerm_subscription" "current_sub" {
+  subscription_id = var.global_configs.subscription_id
 }
 
 data "azurerm_client_config" "current_client" {
