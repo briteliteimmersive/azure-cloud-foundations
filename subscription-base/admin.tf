@@ -11,12 +11,13 @@ variable "admin_configs" {
         public_ip_ranges = []
         subnet_ids       = []
       })
-      storage_accounts = list(object(
+      terraform_backend_storage = object(
         {
           name                     = string
+          container_name           = optional(string, "tf-state-files")
           account_kind             = optional(string, "StorageV2")
           account_tier             = optional(string, "Standard")
-          account_replication_type = optional(string, "LRS")
+          account_replication_type = optional(string, "GRS")
           access_tier              = optional(string)
           edge_zone                = optional(string)
           blob_properties = optional(object(
@@ -44,18 +45,38 @@ variable "admin_configs" {
               days = 30
             }
           })
+        }
+      )
+      additional_admin_storage = optional(list(object(
+        {
+          name                     = string
+          account_kind             = optional(string, "StorageV2")
+          account_tier             = optional(string, "Standard")
+          account_replication_type = optional(string, "LRS")
+          access_tier              = optional(string)
+          edge_zone                = optional(string)
+          blob_properties = optional(object(
+            {
+              versioning_enabled  = bool
+              change_feed_enabled = bool
+              container_delete_retention_policy = object(
+                {
+                  days = number
+                }
+              )
+              delete_retention_policy = object(
+                {
+                  days = number
+                }
+              )
+            }
+          ))
           containers = optional(list(object({
             name                  = string
             container_access_type = optional(string, "private")
           })))
-          file_shares = optional(list(object(
-            {
-              name  = string
-              quota = number
-            }
-          )))
         }
-      ))
+      )), [])
       keyvault = object(
         {
           name     = string
@@ -137,9 +158,24 @@ variable "admin_configs" {
 ## Run-time variables
 locals {
 
-  admin_configs         = var.admin_configs
-  admin_network_rules   = var.admin_configs.network_rules
-  admin_storage         = var.admin_configs.storage_accounts
+  admin_configs       = var.admin_configs
+  admin_network_rules = var.admin_configs.network_rules
+
+  terraform_backend_storage_name           = var.admin_configs.terraform_backend_storage.name
+  terraform_backend_storage_container_name = var.admin_configs.terraform_backend_storage.container_name
+  terraform_backend_storage_rgp            = var.admin_configs.resource_group_name
+  terraform_backend_storage = [
+    merge(var.admin_configs.terraform_backend_storage, {
+      containers = [
+        {
+          name                  = local.terraform_backend_storage_container_name
+          container_access_type = "private"
+        }
+      ]
+    })
+  ]
+
+  admin_storage         = concat(local.terraform_backend_storage, var.admin_configs.additional_admin_storage)
   admin_keyvault        = var.admin_configs.keyvault
   admin_disk_encryption = var.admin_configs.disk_encryption_sets
   admin_recovery_vault  = var.admin_configs.recovery_services_vault

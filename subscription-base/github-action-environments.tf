@@ -57,18 +57,39 @@ resource "github_actions_environment_secret" "spn_client_secret" {
   plaintext_value = azuread_service_principal_password.sub_app_spn_credentials[each.key].value
 }
 
-resource "github_actions_environment_secret" "spn_subscription_id_secret" {
-  for_each        = local.gh_environments
-  repository      = data.github_repository.repo[each.value.repo_full_name].name
-  environment     = github_repository_environment.repo_environment[each.key].environment
-  secret_name     = "ARM_SUBSCRIPTION_ID"
-  plaintext_value = local.subscription_id
+locals {
+
+  static_secrets = {
+    "ARM_SUBSCRIPTION_ID"                   = local.subscription_id
+    "ARM_TENANT_ID"                         = local.client_tenant_id
+    "TF_BACKEND_RESOURCE_GROUP_NAME"        = local.terraform_backend_storage_rgp
+    "TF_BACKEND_STORAGE_ACC_CONTAINER_NAME" = local.terraform_backend_storage_container_name
+    "TF_BACKEND_STORAGE_ACC_NAME"           = local.terraform_backend_storage_container_name
+    "TF_BACKEND_SUBSCRIPTION_ID"            = local.subscription_id
+  }
+
+  gh_environment_static_secret_list = flatten([
+    for env_key, env in local.gh_environments : [
+      for secret_key, secret_value in local.static_secrets : {
+        env_key        = env_key
+        secret_name    = secret_key
+        secret_value   = secret_value
+        repo_full_name = env.repo_full_name
+        env_secret_key = format("%s/%s", env_key, secret_key)
+      }
+    ]
+  ])
+
+  gh_environment_static_secrets = {
+    for secret in local.gh_environment_static_secret_list : secret.env_secret_key => secret
+  }
+
 }
 
-resource "github_actions_environment_secret" "spn_tenant_id_secret" {
-  for_each        = local.gh_environments
+resource "github_actions_environment_secret" "static_secret" {
+  for_each        = local.gh_environment_static_secrets
   repository      = data.github_repository.repo[each.value.repo_full_name].name
-  environment     = github_repository_environment.repo_environment[each.key].environment
-  secret_name     = "ARM_TENANT_ID"
-  plaintext_value = local.client_tenant_id
+  environment     = github_repository_environment.repo_environment[each.value.env_key].environment
+  secret_name     = each.value.secret_name
+  plaintext_value = each.value.secret_value
 }

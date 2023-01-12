@@ -59,7 +59,7 @@ variable "destroy_duration_delay" {
 }
 
 variable "exclude_builtin_role_definitions_from_json" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Roles that needs to be excluded"
 }

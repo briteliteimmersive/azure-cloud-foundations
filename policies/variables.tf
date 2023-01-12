@@ -52,14 +52,14 @@ variable "destroy_duration_delay" {
 }
 
 variable "policy_definition_exclusions" {
-  type        = list
- 
+  type = list(any)
+
   description = "Exclude policy definitions"
 }
 
 variable "policy_set_exclusions" {
-  type        = list
- 
+  type = list(any)
+
   description = "Exclude policy sets"
 }
 

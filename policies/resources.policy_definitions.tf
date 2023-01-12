@@ -12,7 +12,7 @@ resource "azurerm_policy_definition" "enterprise_scale" {
 
   # Optional resource attributes
   description         = try(each.value.template.properties.description, "${each.value.template.name} Policy Definition at scope ${each.value.scope_id}")
-  management_group_id = data.azurerm_management_group.mg_grp1.id 
+  management_group_id = data.azurerm_management_group.mg_grp1.id
   policy_rule         = try(length(each.value.template.properties.policyRule) > 0, false) ? jsonencode(each.value.template.properties.policyRule) : null
   metadata            = try(length(each.value.template.properties.metadata) > 0, false) ? jsonencode(each.value.template.properties.metadata) : null
   parameters          = try(length(each.value.template.properties.parameters) > 0, false) ? jsonencode(each.value.template.properties.parameters) : null
@@ -22,7 +22,7 @@ resource "azurerm_policy_definition" "enterprise_scale" {
 }
 
 resource "time_sleep" "after_azurerm_policy_definition" {
-  depends_on = [    
+  depends_on = [
     azurerm_policy_definition.enterprise_scale,
   ]
 

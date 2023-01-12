@@ -8,9 +8,9 @@ locals {
 }
 
 locals {
-  root_id                           = var.management_group_id  
-  scope_id                          =  data.azurerm_management_group.mg_grp.id
-  template_file_variables           = var.template_file_variables 
+  root_id                 = var.management_group_id
+  scope_id                = data.azurerm_management_group.mg_grp.id
+  template_file_variables = var.template_file_variables
 
 }
 
@@ -30,11 +30,11 @@ locals {
 
 }
 #Manipulate the exclusion files
-locals{
- 
-   exclude_builtin_policy_definitions_from_json_path = [for filepath in var.policy_definition_exclusions : "policy_definitions/${filepath}.json"]
-   exclude_builtin_policy_sets_from_json_path = [for filepath in var.policy_set_exclusions : "policy_set_definitions/${filepath}.json"]
-   
+locals {
+
+  exclude_builtin_policy_definitions_from_json_path = [for filepath in var.policy_definition_exclusions : "policy_definitions/${filepath}.json"]
+  exclude_builtin_policy_sets_from_json_path        = [for filepath in var.policy_set_exclusions : "policy_set_definitions/${filepath}.json"]
+
 }
 locals {
   core_template_file_variables = {
@@ -53,7 +53,7 @@ locals {
 
 locals {
   module_output = {
-    
+
   }
 }
 
