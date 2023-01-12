@@ -78,7 +78,7 @@ locals {
     }
   )
 
-  subscription_id   = data.azurerm_client_config.current_client.subscription_id
+  subscription_id   = data.azurerm_subscription.current_sub.subscription_id
   subscription_name = data.azurerm_subscription.current_sub.display_name
   client_object_id  = data.azurerm_client_config.current_client.object_id
   client_tenant_id  = data.azurerm_client_config.current_client.tenant_id
