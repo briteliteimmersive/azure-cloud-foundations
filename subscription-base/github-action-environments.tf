@@ -18,15 +18,38 @@ variable "gh_base_url" {
 ## Run-Time variables
 locals {
 
+  gh_environment_list = flatten([
+    for spn_key, spn in local.sub_spns : [
+      for gh_env in coalesce(spn.gh_environments, []) : {
+        gh_env_key                = format("%s/%s", gh_env.name, spn_key)
+        name                      = gh_env.name
+        repo_full_name            = format("%s/%s", var.gh_org_name, gh_env.repo_name)
+        spn_key                   = spn_key
+        reviewers                 = gh_env.reviewers
+        branch_protection_enabled = gh_env.branch_protection_enabled
+      }
+    ]
+  ])
+
   gh_environments = {
-    for spn_key, spn in local.sub_spns : spn_key => merge(spn, {
-      repo_full_name = format("%s/%s", var.gh_org_name, spn.gh_environment.repo_name)
-    }) if spn.gh_environment != null
+    for gh_env in local.gh_environment_list : gh_env.gh_env_key => gh_env
   }
 
   gh_repos = toset([
-    for spn in local.gh_environments : format("%s/%s", var.gh_org_name, spn.gh_environment.repo_name)
+    for gh_env in local.gh_environments : gh_env.repo_full_name
   ])
+
+  gh_env_reviewer_users = toset(flatten([
+    for gh_env_key, gh_env in local.gh_environments : [
+      for user in gh_env.reviewers.usernames : user
+    ]
+  ]))
+
+  gh_env_reviewer_teams = toset(flatten([
+    for gh_env_key, gh_env in local.gh_environments : [
+      for team in gh_env.reviewers.teams : team
+    ]
+  ]))
 
 }
 
@@ -35,10 +58,42 @@ data "github_repository" "repo" {
   full_name = each.value
 }
 
+data "github_user" "user" {
+  for_each = local.gh_env_reviewer_users
+  username = each.value
+}
+
+data "github_team" "team" {
+  for_each = local.gh_env_reviewer_teams
+  slug     = each.value
+}
+
 resource "github_repository_environment" "repo_environment" {
   for_each    = local.gh_environments
   repository  = data.github_repository.repo[each.value.repo_full_name].name
-  environment = each.value.gh_environment.name
+  environment = each.value.name
+  dynamic "reviewers" {
+    for_each = [each.value.reviewers]
+
+    content {
+      users = [
+        for username in reviewers.value.usernames : data.github_user.user[username].id
+      ]
+
+      teams = [
+        for team in reviewers.value.teams : data.github_team.team[team].id
+      ]
+    }
+  }
+
+  dynamic "deployment_branch_policy" {
+    for_each = each.value.branch_protection_enabled ? [1] : []
+
+    content {
+      protected_branches     = true
+      custom_branch_policies = false
+    }
+  }
 }
 
 resource "github_actions_environment_secret" "spn_client_id" {
@@ -46,7 +101,7 @@ resource "github_actions_environment_secret" "spn_client_id" {
   repository      = data.github_repository.repo[each.value.repo_full_name].name
   environment     = github_repository_environment.repo_environment[each.key].environment
   secret_name     = "ARM_CLIENT_ID"
-  plaintext_value = azuread_service_principal.sub_app_spn[each.key].application_id
+  plaintext_value = azuread_service_principal.sub_app_spn[each.value.spn_key].application_id
 }
 
 resource "github_actions_environment_secret" "spn_client_secret" {
@@ -54,7 +109,7 @@ resource "github_actions_environment_secret" "spn_client_secret" {
   repository      = data.github_repository.repo[each.value.repo_full_name].name
   environment     = github_repository_environment.repo_environment[each.key].environment
   secret_name     = "ARM_CLIENT_SECRET"
-  plaintext_value = azuread_service_principal_password.sub_app_spn_credentials[each.key].value
+  plaintext_value = azuread_service_principal_password.sub_app_spn_credentials[each.value.spn_key].value
 }
 
 locals {
