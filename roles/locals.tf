@@ -13,13 +13,13 @@ locals {
 }
 
 locals {
-  root_id                           = var.root_id  
-  default_tags                      = var.default_tags
-  template_file_variables           = var.template_file_variables
-  role_definitions_path             = "${path.module}/definitions"
+  root_id                 = var.root_id
+  default_tags            = var.default_tags
+  template_file_variables = var.template_file_variables
+  role_definitions_path   = "${path.module}/definitions"
   #scope_id                          = "${local.provider_path.management_groups}${local.root_id}"  
   #scope_id                          = data.azurerm_subscription.primary.id
-  scope_id = data.azurerm_management_group.mg_grp.id 
+  scope_id = data.azurerm_management_group.mg_grp.id
 }
 
 # The following locals are used in template functions to provide values
@@ -39,17 +39,17 @@ locals {
     local.core_template_file_variables,
   )
 }
-locals{
- 
-   exclude_builtin_role_definitions_from_json_path = [for filepath in var.exclude_builtin_role_definitions_from_json : "${filepath}.json"]
-   
+locals {
+
+  exclude_builtin_role_definitions_from_json_path = [for filepath in var.exclude_builtin_role_definitions_from_json : "${filepath}.json"]
+
 }
 locals {
   role_definitions_from_json = tolist(fileset(local.role_definitions_path, "**"))
   role_definitions_from_yaml = tolist(fileset(local.role_definitions_path, "**/rd_*.{yml,yml.tftpl,yaml,yaml.tftpl}"))
   # exclude_builtin_roles_definitions_from_json = 
   builtin_role_definitions_from_json_inclusion = setsubtract(local.role_definitions_from_json, local.exclude_builtin_role_definitions_from_json_path)
-    
+
   role_definitions_dataset_from_json = try(length(local.builtin_role_definitions_from_json_inclusion) > 0, false) ? {
     for filepath in local.builtin_role_definitions_from_json_inclusion :
     filepath => jsondecode(templatefile("${local.role_definitions_path}/${filepath}", local.template_file_vars))
@@ -72,7 +72,7 @@ locals {
     for key, value in local.role_definitions_dataset_from_yaml :
     uuidv5(value.name, local.scope_id) => value
     if value.type == local.resource_types.role_definition
-  } : null  
+  } : null
 }
 
 # Merge the Role Definition maps into a single map.
@@ -108,7 +108,7 @@ locals {
 locals {
   provider_path = {
     management_groups = "/providers/Microsoft.Management/managementGroups/"
-    role_definition       = "/providers/Microsoft.Authorization/roleDefinitions/"    
+    role_definition   = "/providers/Microsoft.Authorization/roleDefinitions/"
   }
 
   resource_types = {
@@ -117,7 +117,7 @@ locals {
     policy_set_definition = "Microsoft.Authorization/policySetDefinitions"
     role_assignment       = "Microsoft.Authorization/roleAssignments"
     role_definition       = "Microsoft.Authorization/roleDefinitions"
-  }  
+  }
 }
 
 locals {

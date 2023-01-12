@@ -4,9 +4,9 @@ locals {
 }
 locals {
   # exclude_builtin_policy_definitions_from_json = 
-   builtin_policy_definitions_from_json_inclusion = setsubtract(local.builtin_policy_definitions_from_json, local.exclude_builtin_policy_definitions_from_json_path)
-  
-  
+  builtin_policy_definitions_from_json_inclusion = setsubtract(local.builtin_policy_definitions_from_json, local.exclude_builtin_policy_definitions_from_json_path)
+
+
 }
 # If Policy Definition files exist, load content into dataset
 locals {
@@ -18,7 +18,7 @@ locals {
     for filepath in local.builtin_policy_definitions_from_yaml :
     filepath => yamldecode(templatefile("${local.builtin_library_path}/${filepath}", local.template_file_vars))
   } : null
-  
+
 }
 
 # If Policy Definition datasets exist, convert to map
@@ -33,7 +33,7 @@ locals {
     value.name => value
     if value.type == local.resource_types.policy_definition
   } : null
-  
+
 }
 
 # Merge the Policy Definition maps into a single map.
@@ -43,7 +43,7 @@ locals {
 locals {
   archetype_policy_definitions_map = merge(
     local.builtin_policy_definitions_map_from_json,
-    local.builtin_policy_definitions_map_from_yaml,    
+    local.builtin_policy_definitions_map_from_yaml,
   )
 }
 

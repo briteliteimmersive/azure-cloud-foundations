@@ -4,12 +4,22 @@ variable "subscription_spns" {
     {
       name               = string
       role_definition_id = optional(string)
-      gh_environment = optional(object(
+      gh_environments = optional(list(object(
         {
-          name      = string
-          repo_name = string
+          name                      = string
+          repo_name                 = string
+          branch_protection_enabled = bool
+          reviewers = optional(object(
+            {
+              usernames = optional(list(string), [])
+              teams     = optional(list(string), [])
+            }
+            ), {
+            usernames = []
+            teams     = []
+          })
         }
-      ))
+      )))
       tags = optional(list(string), [])
     }
   ))
@@ -31,8 +41,8 @@ locals {
         local.subscription_id,
         spn.role_definition_id
       ) : null
-      tags           = concat(["created-by-terraform"], spn.tags)
-      gh_environment = spn.gh_environment
+      tags            = concat(["created-by-terraform"], spn.tags)
+      gh_environments = spn.gh_environments
     }
   }
 

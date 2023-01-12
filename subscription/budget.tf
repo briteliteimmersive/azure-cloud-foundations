@@ -17,7 +17,7 @@ resource "azurerm_consumption_budget_subscription" "application_sub_budget" {
 
   time_period {
     start_date = try(each.value.time_period.star_date, join("", [formatdate("YYYY-MM", timestamp()), "-01T00:00:00Z"]))
-    end_date = try(each.value.time_period.end_date, null)
+    end_date   = try(each.value.time_period.end_date, null)
   }
 
   dynamic "notification" {

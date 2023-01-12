@@ -30,7 +30,7 @@ resource "azurerm_policy_set_definition" "enterprise_scale" {
   parameters          = try(length(each.value.template.properties.parameters) > 0, false) ? jsonencode(each.value.template.properties.parameters) : null
 
   # Set explicit dependency on Management Group and Policy Definition deployments
-  depends_on = [    
+  depends_on = [
     time_sleep.after_azurerm_policy_definition,
     azurerm_policy_definition.enterprise_scale
 
@@ -39,7 +39,7 @@ resource "azurerm_policy_set_definition" "enterprise_scale" {
 }
 
 resource "time_sleep" "after_azurerm_policy_set_definition" {
-  depends_on = [    
+  depends_on = [
     time_sleep.after_azurerm_policy_definition,
     azurerm_policy_set_definition.enterprise_scale,
   ]

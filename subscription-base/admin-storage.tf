@@ -35,19 +35,6 @@ locals {
     for container in local.storage_container_list : container.container_key => container
   }
 
-  storage_share_list = flatten([
-    for storage_key, storage_config in local.storage_config : [
-      for file_share in coalesce(storage_config.file_shares, []) : merge(file_share,
-        {
-          file_share_key = format("%s/%s", storage_key, file_share.name)
-          storage_key    = storage_key
-      })
-    ]
-  ])
-
-  storage_shares = {
-    for file_share in local.storage_share_list : file_share.file_share_key => file_share
-  }
 }
 
 resource "azurerm_storage_account" "storage_account" {
@@ -111,12 +98,4 @@ resource "azurerm_storage_container" "container" {
   name                  = each.value.name
   storage_account_name  = azurerm_storage_account.storage_account[each.value.storage_key].name
   container_access_type = each.value.container_access_type
-}
-
-
-resource "azurerm_storage_share" "storage_share" {
-  for_each             = local.storage_shares
-  name                 = each.value.name
-  storage_account_name = azurerm_storage_account.storage_account[each.value.storage_key].name
-  quota                = each.value.quota
 }
