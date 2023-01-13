@@ -119,7 +119,7 @@ locals {
     "ARM_TENANT_ID"                         = local.client_tenant_id
     "TF_BACKEND_RESOURCE_GROUP_NAME"        = local.terraform_backend_storage_rgp
     "TF_BACKEND_STORAGE_ACC_CONTAINER_NAME" = local.terraform_backend_storage_container_name
-    "TF_BACKEND_STORAGE_ACC_NAME"           = local.terraform_backend_storage_container_name
+    "TF_BACKEND_STORAGE_ACC_NAME"           = local.terraform_backend_storage_name
     "TF_BACKEND_SUBSCRIPTION_ID"            = local.subscription_id
   }
 
