@@ -7,7 +7,7 @@ variable "gh_token" {
 
 variable "gh_org_name" {
   type    = string
-  default = null
+  default = "briteliteimmersive"
 }
 
 variable "gh_base_url" {
