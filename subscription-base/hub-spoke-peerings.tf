@@ -45,7 +45,7 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub_peerings" {
 resource "azurerm_virtual_network_peering" "hub_to_spoke_peerings" {
   for_each                     = local.hub_to_spoke_peerings
   provider                     = azurerm.hub-sub
-  name                         = each.key
+  name                         = each.value.name
   resource_group_name          = local.regional_hub_vnet_resource_group_name
   virtual_network_name         = local.regional_hub_vnet_name
   remote_virtual_network_id    = azurerm_virtual_network.virtual_network[each.value.remote_vnet_key].id
