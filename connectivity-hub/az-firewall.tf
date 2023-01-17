@@ -53,6 +53,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   resource_group_name = each.value.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
+  tags                = merge(each.value.tags, local.common_resource_tags)
 }
 
 resource "azurerm_firewall" "firewall" {
@@ -71,4 +72,6 @@ resource "azurerm_firewall" "firewall" {
       public_ip_address_id = azurerm_public_ip.firewall_pip[each.key].id
     }
   }
+  
+  tags                = merge(each.value.tags, local.common_resource_tags)
 }
