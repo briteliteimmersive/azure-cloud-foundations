@@ -33,6 +33,7 @@ locals {
   firewall_public_ips = {
     for fw_key, fw in local.firewall : fw_key => merge({
       resource_group_name = fw.vnet_resource_group_name
+      tags                = fw.tags
       }, {
       for ip_config in fw.ip_configs : "public_ip_name" => format("%s-pip%d", fw.name, index(fw.ip_configs, ip_config) + 1)
     })
