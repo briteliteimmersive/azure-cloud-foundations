@@ -11,7 +11,7 @@ locals {
 resource "azurerm_consumption_budget_subscription" "application_sub_budget" {
   for_each        = local.subsciption_budgets
   name            = each.value.budget_name
-  subscription_id = azurerm_subscription.application_sub["app_sub"].id
+  subscription_id = format("%s%s", "/subscriptions/", azurerm_subscription.application_sub["app_sub"].subscription_id)
   amount          = each.value.budget_amount
   time_grain      = try(each.value.time_grain, "Monthly")
 
@@ -21,7 +21,7 @@ resource "azurerm_consumption_budget_subscription" "application_sub_budget" {
   }
 
   dynamic "notification" {
-    for_each = each.value.notifications
+    for_each = each.value.notification
     content {
       enabled        = try(notification.value["enabled"], true)
       operator       = notification.value["operator"]
