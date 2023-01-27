@@ -34,7 +34,16 @@ variable "admin_configs" {
                 }
               )
             }
-          ))
+            ), {
+            versioning_enabled  = true
+            change_feed_enabled = null
+            container_delete_retention_policy = {
+              days = 30
+            }
+            delete_retention_policy = {
+              days = 30
+            }
+          })
           containers = optional(list(object({
             name                  = string
             container_access_type = optional(string, "private")
