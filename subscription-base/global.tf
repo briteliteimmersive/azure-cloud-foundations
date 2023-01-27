@@ -41,7 +41,7 @@ variable "global_configs" {
       ))
       app_terraform_backend = optional(object(
         {
-          subscription_id     = string
+          subscription_id     = optional(string)
           name                = string
           resource_group_name = string
           container_name      = string
