@@ -39,6 +39,14 @@ variable "global_configs" {
           resource_group_name = string
         }
       ))
+      app_terraform_backend = optional(object(
+        {
+          subscription_id     = string
+          name                = string
+          resource_group_name = string
+          container_name      = string
+        }
+      ))
     }
   )
 
@@ -69,9 +77,10 @@ data "azuread_client_config" "current_tenant" {
 ## Run-time variables
 locals {
 
-  location        = var.global_configs.location
-  app_unique_code = var.global_configs.mandatory_tags.app-id
-  environment     = var.global_configs.mandatory_tags.environment
+  location              = var.global_configs.location
+  app_unique_code       = var.global_configs.mandatory_tags.app-id
+  environment           = var.global_configs.mandatory_tags.environment
+  app_terraform_backend = var.global_configs.app_terraform_backend
   common_resource_tags = merge(
     var.global_configs.mandatory_tags, {
       deployed-by = var.deployment_info
