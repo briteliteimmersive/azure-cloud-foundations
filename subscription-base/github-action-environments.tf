@@ -114,13 +114,18 @@ resource "github_actions_environment_secret" "spn_client_secret" {
 
 locals {
 
-  static_secrets = {
+
+
+  static_secrets = local.app_terraform_backend != null ? {
     "ARM_SUBSCRIPTION_ID"                   = local.subscription_id
     "ARM_TENANT_ID"                         = local.client_tenant_id
-    "TF_BACKEND_RESOURCE_GROUP_NAME"        = local.terraform_backend_storage_rgp
-    "TF_BACKEND_STORAGE_ACC_CONTAINER_NAME" = local.terraform_backend_storage_container_name
-    "TF_BACKEND_STORAGE_ACC_NAME"           = local.terraform_backend_storage_name
-    "TF_BACKEND_SUBSCRIPTION_ID"            = local.subscription_id
+    "TF_BACKEND_RESOURCE_GROUP_NAME"        = local.app_terraform_backend.resource_group_name
+    "TF_BACKEND_STORAGE_ACC_CONTAINER_NAME" = local.app_terraform_backend.container_name
+    "TF_BACKEND_STORAGE_ACC_NAME"           = local.app_terraform_backend.name
+    "TF_BACKEND_SUBSCRIPTION_ID"            = local.app_terraform_backend.subscription_id
+    } : {
+    "ARM_SUBSCRIPTION_ID" = local.subscription_id
+    "ARM_TENANT_ID"       = local.client_tenant_id
   }
 
   gh_environment_static_secret_list = flatten([
