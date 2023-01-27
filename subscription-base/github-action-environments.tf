@@ -122,7 +122,7 @@ locals {
     "TF_BACKEND_RESOURCE_GROUP_NAME"        = local.app_terraform_backend.resource_group_name
     "TF_BACKEND_STORAGE_ACC_CONTAINER_NAME" = local.app_terraform_backend.container_name
     "TF_BACKEND_STORAGE_ACC_NAME"           = local.app_terraform_backend.name
-    "TF_BACKEND_SUBSCRIPTION_ID"            = try(local.app_terraform_backend.subscription_id, local.subscription_id)
+    "TF_BACKEND_SUBSCRIPTION_ID"            = coalesce(local.app_terraform_backend.subscription_id, local.subscription_id)
     } : {
     "ARM_SUBSCRIPTION_ID" = local.subscription_id
     "ARM_TENANT_ID"       = local.client_tenant_id
