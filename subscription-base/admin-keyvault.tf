@@ -1,8 +1,9 @@
 ## Create a key vault
 locals {
+  admin_keyvault_key = lower(format("%s/%s", local.resource_groups.admin_rg.name, local.admin_keyvault.name))
   keyvault_config = {
-    lower(format("%s/%s", local.resource_groups.admin_rg.name, local.admin_keyvault.name)) = {
-      keyvault_key = lower(format("%s/%s", local.resource_groups.admin_rg.name, local.admin_keyvault.name))
+    "${local.admin_keyvault_key}" = {
+      keyvault_key = local.admin_keyvault_key
       name         = local.admin_keyvault.name
       sku_name     = local.admin_keyvault.sku_name
       network_acls = {
@@ -60,4 +61,15 @@ resource "time_sleep" "role_assignment_propagation" {
   triggers = {
     role_assignment_id = azurerm_role_assignment.kv_admin_role_assignment[each.key].id
   }
+}
+
+data "azurerm_role_definition" "kv_crypto_officer_builtin_role" {
+  name = "Key Vault Crypto Officer"
+}
+
+resource "azurerm_role_assignment" "infra_kv_sub_spn_assignment" {
+  for_each           = local.sub_spn_role_assignments
+  scope              = azurerm_key_vault.admin_keyvault[local.admin_keyvault_key].id
+  role_definition_id = format("/subscriptions/%s%s", local.subscription_id, data.azurerm_role_definition.kv_crypto_officer_builtin_role.id)
+  principal_id       = azuread_service_principal.sub_app_spn[each.key].object_id
 }
