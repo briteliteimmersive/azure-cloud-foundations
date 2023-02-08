@@ -13,7 +13,7 @@ locals {
         "wrapKey",
       ]
       disk_encryption_set_key = lower(format("%s/%s", local.resource_groups.admin_rg.name, disk_encryption_config.name))
-      keyvault_key            = lower(format("%s/%s", local.resource_groups.admin_rg.name, local.admin_keyvault.name))
+      keyvault_key            = local.admin_keyvault_key
     })
   }
 }
@@ -44,7 +44,7 @@ resource "azurerm_disk_encryption_set" "disk_encryption_set" {
 }
 
 data "azurerm_role_definition" "kv_cypto_user_builtin_role" {
-  name = "Key Vault Crypto User"
+  name = "Key Vault Crypto Service Encryption User"
 }
 
 resource "azurerm_role_assignment" "disk_encryption_role_assignment" {
