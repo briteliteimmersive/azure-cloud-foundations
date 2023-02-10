@@ -2,7 +2,9 @@
 variable "global_configs" {
   type = object(
     {
-      location = string
+      location                 = string
+      vnet_name                = string
+      vnet_resource_group_name = string
       mandatory_tags = object(
         {
           app-id        = string
@@ -41,9 +43,11 @@ data "azurerm_client_config" "current_client" {
 ## Run-time variables
 locals {
 
-  location        = var.global_configs.location
-  app_unique_code = var.global_configs.mandatory_tags.app-id
-  environment     = var.global_configs.mandatory_tags.environment
+  location                 = var.global_configs.location
+  vnet_name                = var.global_configs.vnet_name
+  vnet_resource_group_name = var.global_configs.vnet_resource_group_name
+  app_unique_code          = var.global_configs.mandatory_tags.app-id
+  environment              = var.global_configs.mandatory_tags.environment
   common_resource_tags = merge(
     var.global_configs.mandatory_tags, {
       deployed-by = var.deployment_info
