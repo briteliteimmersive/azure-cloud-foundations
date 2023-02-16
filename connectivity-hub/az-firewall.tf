@@ -6,6 +6,7 @@ variable "firewall_config" {
     sku_name               = string
     subnet_name            = optional(string, "AzureFirewallSubnet")
     primary_public_ip_name = string
+    firewall_policy_name   = optional(string)
     associated_public_ips  = optional(list(string), [])
     tags                   = optional(map(string), {})
   })
@@ -36,6 +37,7 @@ resource "azurerm_firewall" "firewall" {
   resource_group_name = local.vnet_resource_group_name
   sku_name            = each.value.sku_name
   sku_tier            = each.value.sku_tier
+  firewall_policy_id  = try(azurerm_firewall_policy.policy[lower(format("%s/%s", local.vnet_resource_group_name, each.value.firewall_policy_name))].id, null)
 
   ip_configuration {
     name                 = each.value.primary_public_ip_name
