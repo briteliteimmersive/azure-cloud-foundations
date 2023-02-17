@@ -157,7 +157,7 @@ resource "time_sleep" "wait_seconds" {
 resource "azurerm_dns_zone" "public_dns_zone" {
   for_each            = local.dns_zones
   name                = each.value.name
-  resource_group_name = try(azurerm_resource_group.dns_zone_resource_grp[each.value.resource_group_key].name, local.vnet_resource_group_name)
+  resource_group_name = each.value.resource_group_name != null ? azurerm_resource_group.dns_zone_resource_grp[each.value.resource_group_key].name : local.vnet_resource_group_name
 
   dynamic "soa_record" {
     for_each = try(length(each.value.soa_record) > 0, false) ? [merge(each.value.soa_record, {
